@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fee Receipt — College ERP Management System">
+    <title>Fee Receipt &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header print-hide" style="justify-content: space-between;">
+                    <div>
+                        <h1>&#128176; Payment Receipt</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Transaction details and printable receipt.
+                        </p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <a href="fee-payment.html" class="btn btn-outline">&larr; New
+                            Payment</a>
+                        <button class="btn btn-primary" onclick="window.print()">
+                            &#128424; Print Receipt
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Receipt Document to Print -->
+                <div class="card p-24" style="max-width: 800px; margin: 0 auto;">
+
+                    <!-- University Branding Header -->
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-color); padding-bottom: 16px; margin-bottom: 24px;">
+                        <div>
+                            <h2 style="color: var(--primary-color); margin-bottom: 8px;">COLLEGE OF ADVANCED COMPUTING
+                            </h2>
+                            <p class="text-muted" style="font-size: 13px;">123 Educational Hub, Tech Vihar, City
+                                400010<br>Tel: +91 1234 567890 | Email: accounts@college.edu</p>
+                        </div>
+                        <div
+                            style="text-align: right; background: var(--bg-light); padding: 8px 16px; border-radius: 4px;">
+                            <h3 style="margin-bottom: 4px;">FEE RECEIPT</h3>
+                            <p class="text-muted" style="font-size: 13px;"><strong>Original Copy</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Meta Info -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 24px; font-size: 14px;">
+                        <div>
+                            <p style="margin-bottom: 6px;"><strong>Receipt No:</strong> <span
+                                    id="valReceiptNo">RCPT-2024-9042</span></p>
+                            <p style="margin-bottom: 6px;"><strong>Date:</strong> <span id="valDate"></span></p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="margin-bottom: 6px;"><strong>Academic Year:</strong> 2025-26</p>
+                            <p style="margin-bottom: 6px;"><strong>Cashier:</strong> Admin (System)</p>
+                        </div>
+                    </div>
+
+                    <!-- Student Info -->
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; padding: 16px; background: var(--bg-light); border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 14px;">
+                        <div>
+                            <p style="margin-bottom: 8px;"><strong>Student Name:</strong> <span id="valName">Priya
+                                    Sharma</span></p>
+                            <p style="margin-bottom: 0px;"><strong>Roll Number:</strong> <span
+                                    id="valRoll">STU2024001</span></p>
+                        </div>
+                        <div>
+                            <p style="margin-bottom: 8px;"><strong>Course / Program:</strong> Master of Computer
+                                Applications</p>
+                            <p style="margin-bottom: 0px;"><strong>Semester:</strong> 3</p>
+                        </div>
+                    </div>
+
+                    <!-- Particulars Table -->
+                    <table class="erp-table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">Sl.No.</th>
+                                <th style="width: 60%;">Description of Fees</th>
+                                <th style="width: 30%; text-align: right;">Amount (INR &#8377;)</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 15px;">
+                            <tr>
+                                <td>1</td>
+                                <td id="valFeeType">Tuition Fee (Installment 2)</td>
+                                <td style="text-align: right;" id="valAmount">45,000.00</td>
+                            </tr>
+                            <!-- Empty rows for spacing -->
+                            <tr>
+                                <td style="height: 30px; border-bottom: none;"></td>
+                                <td style="border-bottom: none;"></td>
+                                <td style="border-bottom: none;"></td>
+                            </tr>
+                            <tr>
+                                <td style="height: 30px; border-bottom: none;"></td>
+                                <td style="border-bottom: none;"></td>
+                                <td style="border-bottom: none;"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-top: 2px solid var(--border-color); background: var(--bg-light);">
+                                <th colspan="2" style="text-align: right; padding: 12px 16px; font-size: 15px;">Total
+                                    Amount Paid</th>
+                                <th style="text-align: right; padding: 12px 16px; font-size: 16px; color: var(--primary-color);"
+                                    id="valTotal">&#8377; 45,000.00</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Amount in Words -->
+                    <div style="margin-top: 16px; font-size: 14px;">
+                        <p><strong>Amount in Words:</strong> Rupees <span id="valWords">Forty Five Thousand</span> Only.
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 8px; font-size: 14px;">
+                        <p><strong>Payment Mode:</strong> <span id="valMode">Online Transfer</span> <span
+                                id="valRef">(Ref: UTR9876543210)</span></p>
+                    </div>
+
+                    <!-- Signatures -->
+                    <div style="display: flex; justify-content: space-between; margin-top: 80px; padding-top: 16px;">
+                        <div style="text-align: center;">
+                            <p style="margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Computer Generated
+                                Receipt</p>
+                            <div style="border-top: 1px solid var(--border-color); padding-top: 8px; width: 200px;">
+                                Authorized Signatory</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <p
+                                style="margin-bottom: 4px; font-size: 12px; color: var(--text-muted); visibility: hidden;">
+                                Stamp Here</p>
+                            <div style="border-top: 1px solid var(--border-color); padding-top: 8px; width: 200px;">
+                                Institute Seal</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 32px; font-size: 12px; color: var(--text-muted);">
+                        * This receipt is subject to realization of cheque / DD. Fees once paid are non-refundable.
+                    </div>
+
+                </div>
+
+            </main>
+
+            <div id="footer-container" class="print-hide"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Receipt',
+            breadcrumb: 'Fees > Receipt',
+            userRole: 'Admin' // Real app handles auth checks
+        });
+
+        // Extract query params for backend fetching
+        const urlParams = new URLSearchParams(window.location.search);
+        const receiptId = urlParams.get('receiptId');
+        
+        if (receiptId) {
+            document.getElementById('valReceiptNo').textContent = 'REC-' + String(receiptId).padStart(6, '0');
+            
+            fetch(`http://localhost:5000/api/fees/receipt/${receiptId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 200 && data.data) {
+                        const fee = data.data;
+                        
+                        // Set Date
+                        const d = new Date(fee.payment_date);
+                        document.getElementById('valDate').textContent = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        
+                        // Set Amount
+                        const formattedAmt = parseFloat(fee.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                        document.getElementById('valAmount').textContent = formattedAmt;
+                        document.getElementById('valTotal').innerHTML = `&#8377; ${formattedAmt}`;
+                        
+                        // Set Details
+                        document.getElementById('valFeeType').textContent = fee.fee_type;
+                        document.getElementById('valRoll').textContent = fee.student_id;
+                        document.getElementById('valName').textContent = fee.student_name;
+                        
+                        let progName = fee.program;
+                        if (progName === 'MCA') progName = "Master of Computer Applications";
+                        if (progName === 'BCA') progName = "Bachelor of Computer Applications";
+                        document.querySelector('#valRoll').parentElement.parentElement.nextElementSibling.querySelector('p').innerHTML = `<strong>Course / Program:</strong> ${progName || 'N/A'}`;
+                        document.querySelector('#valRoll').parentElement.parentElement.nextElementSibling.querySelectorAll('p')[1].innerHTML = `<strong>Semester:</strong> ${fee.semester || 'N/A'}`;
+                    } else {
+                        ERP_Toast.show('Receipt not found.', 'error');
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching receipt:", err);
+                    ERP_Toast.show('Failed to fetch receipt data.', 'error');
+                });
+        }
+    </script>
+
+    <style>
+        /* Print specific styles */
+        @media print {
+
+            .print-hide,
+            .sidebar,
+            .erp-header {
+                display: none !important;
+            }
+
+            .erp-main {
+                margin-left: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+            }
+
+            .erp-content {
+                padding: 0 !important;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: none !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+
+            body {
+                background: white !important;
+            }
+        }
+    </style>
+
+</body>
+
+</html>

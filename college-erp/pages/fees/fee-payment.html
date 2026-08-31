@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fee Payment — College ERP Management System">
+    <title>Fee Payment &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<script>if(localStorage.getItem('erp_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128176; Fee Collection</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Process student tuition and miscellaneous fee payments.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-header border-bottom">
+                        <h3>Payment Entry Form</h3>
+                    </div>
+
+                    <div class="card-body bg-light border-bottom">
+                        <!-- Student Search -->
+                        <form class="form-grid" id="searchStudentForm" style="align-items: end;">
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label class="form-label" for="studentId">Student Roll Number</label>
+                                <input type="text" class="form-control" id="studentId" placeholder="e.g. STU2024001">
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" style="width: 100%; padding-bottom: 2px;"
+                                    onclick="loadStudentDues()">Find Student</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-body" id="paymentDetailsSection" style="display: none;">
+
+                        <!-- Student Info Snapshot -->
+                        <div id="studentSnapshot"
+                            style="display:flex; justify-content:space-between; align-items:center; background: var(--hover-color); padding: 16px; border-radius: var(--border-radius); margin-bottom: 24px;">
+                            <div>
+                                <h4 style="margin-bottom: 4px;" id="snapshotName">Student Name <span class="badge badge-success ml-8"
+                                        style="font-size: 10px;">Active</span></h4>
+                                <span class="text-muted" style="font-size: var(--font-size-sm);" id="snapshotMeta">Program &bull; Semester &bull; Roll</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <span class="text-muted"
+                                    style="display:block; font-size:var(--font-size-sm); margin-bottom: 2px;">Total
+                                    Pending Dues</span>
+                                <strong style="color: var(--danger-color); font-size: 1.2rem;">&#8377; <span id="snapshotDues">45,000</span></strong>
+                            </div>
+                        </div>
+
+                        <form id="paymentForm" novalidate>
+                            <h4 class="form-section-title">Payment Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="feeType">Fee Type <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="feeType" required>
+                                        <option value="" disabled selected>Select Type</option>
+                                        <option value="Tuition">Tuition Fee</option>
+                                        <option value="Hostel">Hostel Fee</option>
+                                        <option value="Transport">Transport Fee</option>
+                                        <option value="Miscellaneous">Miscellaneous</option>
+                                    </select>
+                                    <div class="form-error">Required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="amount">Amount (&#8377;) <span
+                                            class="required">*</span></label>
+                                    <input type="number" class="form-control" id="amount" min="1" max="500000"
+                                        placeholder="0.00" required>
+                                    <div class="form-error">Valid amount required.</div>
+                                </div>
+
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label class="form-label" for="payMode">Payment Mode <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="payMode" required>
+                                        <option value="" disabled selected>Select Mode</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="Demand Draft">Demand Draft (DD)</option>
+                                        <option value="Online">Online Transfer / UPI</option>
+                                    </select>
+                                    <div class="form-error">Required.</div>
+                                </div>
+
+                                <div class="form-group" id="refGroup" style="grid-column: span 2; display: none;">
+                                    <label class="form-label" for="referenceNo">Reference / Cheque Number</label>
+                                    <input type="text" class="form-control" id="referenceNo"
+                                        placeholder="Required for non-cash payments">
+                                </div>
+
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label class="form-label" for="remarks">Remarks (Optional)</label>
+                                    <textarea class="form-control" id="remarks" rows="2"
+                                        placeholder="Any additional notes"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group"
+                                style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                                <button type="reset" class="btn btn-outline"
+                                    onclick="document.getElementById('paymentDetailsSection').style.display='none'">Cancel</button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    &#10003; Process Payment
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Fee Payment',
+            breadcrumb: 'Fees > Payment Entry',
+            userRole: 'Admin'
+        });
+
+        async function loadStudentDues() {
+            const sid = document.getElementById('studentId').value.trim();
+            if (!sid) {
+                ERP_Toast.show('Please enter Student ID.', 'error');
+                return;
+            }
+            
+            try {
+                const res = await fetch('http://localhost:5000/api/users?role=student');
+                const data = await res.json();
+                const liveUsers = data.data || [];
+                const student = liveUsers.find(u => String(u.id) === sid);
+                
+                if(!student) {
+                    ERP_Toast.show('Student not found in database.', 'error');
+                    document.getElementById('paymentDetailsSection').style.display = 'none';
+                    return;
+                }
+
+                document.getElementById('snapshotName').innerHTML = `${student.name} <span class="badge badge-success ml-8" style="font-size: 10px;">Active</span>`;
+                document.getElementById('snapshotMeta').innerHTML = `${student.program} &bull; Semester ${student.semester} &bull; Roll: ${student.id}`;
+                const mockDues = Math.floor(Math.random() * 50000) + 10000;
+                document.getElementById('snapshotDues').innerText = mockDues.toLocaleString();
+
+                document.getElementById('paymentDetailsSection').style.display = 'block';
+            } catch (err) {
+                console.error("Error fetching student details:", err);
+                ERP_Toast.show('Network error.', 'error');
+            }
+        }
+
+        // Toggle reference input based on mode
+        document.getElementById('payMode').addEventListener('change', function () {
+            const refGroup = document.getElementById('refGroup');
+            const refInput = document.getElementById('referenceNo');
+            if (this.value && this.value !== 'Cash') {
+                refGroup.style.display = 'block';
+                refInput.setAttribute('required', 'required');
+            } else {
+                refGroup.style.display = 'none';
+                refInput.removeAttribute('required');
+            }
+        });
+
+        // Handle submit
+        document.getElementById('paymentForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            if (!validateForm(this)) return;
+
+            const btn = document.getElementById('submitBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Processing...';
+
+            const studentId = document.getElementById('studentId').value.trim();
+            const amount = document.getElementById('amount').value;
+            const feeType = document.getElementById('feeType').value;
+            const paymentMode = document.getElementById('payMode').value;
+            const referenceNo = document.getElementById('referenceNo').value;
+
+            try {
+                const res = await fetch('http://localhost:5000/api/fees', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ studentId, amount, feeType, paymentMode, referenceNo })
+                });
+
+                const data = await res.json();
+
+                if (data.status === 201) {
+                    ERP_Toast.show('Payment processed successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = `receipt.html?receiptId=${data.data.receiptId}`;
+                    }, 1000);
+                } else {
+                    ERP_Toast.show(data.message || 'Payment failed.', 'error');
+                }
+            } catch (err) {
+                console.error("Payment Error:", err);
+                ERP_Toast.show('Network error. Failed to process payment.', 'error');
+            } finally {
+                btn.innerHTML = origText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+
+</html>

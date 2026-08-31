@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Register — College ERP Management System">
+    <title>Register &mdash; College ERP System</title>
+
+    <!-- Global & Auth Styles -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
+
+    <!-- Favicon placeholder -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <main class="auth-page" id="registerPage">
+
+        <!-- ---- LEFT PANEL: Branding ---- -->
+        <section class="auth-panel-left" aria-label="System Information">
+
+            <!-- Institution Logo -->
+            <div class="auth-logo-circle" aria-hidden="true">
+                &#127979;
+            </div>
+
+            <h1>College <span>ERP</span><br>Management System</h1>
+            <p>A comprehensive Enterprise Resource Planning system for streamlined academic administration.</p>
+
+            <!-- Feature Highlights -->
+            <div class="auth-features" role="list">
+                <div class="auth-feature-item" role="listitem">
+                    <div class="auth-feature-icon">&#128107;</div>
+                    <div class="auth-feature-text">
+                        <h4>Student Management</h4>
+                        <p>Enrollment, profiles, academic records</p>
+                    </div>
+                </div>
+                <div class="auth-feature-item" role="listitem">
+                    <div class="auth-feature-icon">&#128203;</div>
+                    <div class="auth-feature-text">
+                        <h4>Examination &amp; Results</h4>
+                        <p>Marks entry, grade sheets, transcripts</p>
+                    </div>
+                </div>
+                <div class="auth-feature-item" role="listitem">
+                    <div class="auth-feature-icon">&#128176;</div>
+                    <div class="auth-feature-text">
+                        <h4>Fee Management</h4>
+                        <p>Payment tracking, receipts, pending dues</p>
+                    </div>
+                </div>
+            </div><!-- end auth-features -->
+
+        </section><!-- end auth-panel-left -->  
+
+
+        <!-- ---- RIGHT PANEL: Register Form ---- -->
+        <section class="auth-panel-right" aria-label="Registration Form">
+
+            <div class="auth-card" style="max-width: 500px;">
+
+                <!-- Card Header -->
+                <div class="auth-card-header">
+                    <h2>Create Account</h2>
+                    <p>Register as a Student or Faculty member</p>
+                </div>
+
+                <!-- ---- Role Selector ---- -->
+                <div class="role-tabs" role="tablist" aria-label="Select your role"
+                    style="grid-template-columns: 1fr 1fr;">
+                    <button class="role-tab active" id="roleStudent" role="tab" aria-selected="true"
+                        onclick="selectRegisterRole('student', this)">
+                        <span>&#127979;</span>
+                        Student
+                    </button>
+                    <button class="role-tab" id="roleFaculty" role="tab" aria-selected="false"
+                        onclick="selectRegisterRole('faculty', this)">
+                        <span>&#128084;</span>
+                        Faculty
+                    </button>
+                </div>
+
+                <!-- ---- Register Form ---- -->
+                <form id="registerForm" novalidate>
+
+                    <!-- Hidden input to track selected role -->
+                    <input type="hidden" id="regRole" value="student">
+
+                    <div class="form-grid">
+                        <!-- Full Name -->
+                        <div class="form-group">
+                            <label class="form-label" for="regName">
+                                Full Name <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="regName" placeholder="e.g. Rahul Sharma"
+                                required>
+                            <div class="form-error">Please enter your full name.</div>
+                        </div>
+
+                        <!-- ID / Roll Number -->
+                        <div class="form-group">
+                            <label class="form-label" for="regId">
+                                <span id="regIdLabel">Roll Number</span> <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="regId" placeholder="e.g. STU2024099" required>
+                            <div class="form-error">Please enter your ID.</div>
+                        </div>
+                    </div>
+
+                    <!-- Student Specific Extra Fields -->
+                    <div id="studentExtraFields">
+                        <div class="form-grid" style="margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label class="form-label" for="regProgram">Program <span
+                                        class="required">*</span></label>
+                                <select class="form-control" id="regProgram">
+                                    <option value="MCA">MCA</option>
+                                    <option value="BCA">BCA</option>
+                                    <option value="MBA">MBA</option>
+                                    <option value="BTech">B.Tech</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="regSemester">Semester <span
+                                        class="required">*</span></label>
+                                <select class="form-control" id="regSemester">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="regAy">Academic Year <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="regAy" placeholder="e.g. 2025-26"
+                                value="2025-26" required>
+                            <div class="form-error">Please enter the academic year.</div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label class="form-label" for="regEmail">
+                            Email Address <span class="required">*</span>
+                        </label>
+                        <input type="email" class="form-control" id="regEmail" placeholder="your@email.com" required>
+                        <div class="form-error">Please enter a valid email.</div>
+                    </div>
+
+                    <div class="form-grid">
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label class="form-label" for="regPassword">
+                                Password <span class="required">*</span>
+                            </label>
+                            <input type="password" class="form-control" id="regPassword" placeholder="Min 4 chars"
+                                required data-min-length="4">
+                            <div class="form-error">Min 4 characters required.</div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group">
+                            <label class="form-label" for="regConfirm">
+                                Confirm Password <span class="required">*</span>
+                            </label>
+                            <input type="password" class="form-control" id="regConfirm" placeholder="Re-enter password"
+                                required>
+                            <div class="form-error" id="regMatchError">Passwords do not match.</div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" id="registerBtn"
+                        style="margin-top: 10px;">
+                        Submit Request &rarr;
+                    </button>
+
+                    <!-- Success Alert -->
+                    <div class="alert alert-success mt-16 hidden" id="registerSuccess" role="alert">
+                        &#10003; Registration submitted! Waiting for Admin approval.
+                    </div>
+
+                    <!-- Registration Link -->
+                    <div style="text-align: center; margin-top: 24px;">
+                        <span class="text-muted" style="font-size: var(--font-size-sm);">Already have an account?</span>
+                        <a href="index.html" class="forgot-link" style="margin-left: 4px;">Sign in here</a>
+                    </div>
+
+                </form><!-- end registerForm -->
+
+            </div><!-- end auth-card -->
+
+        </section><!-- end auth-panel-right -->
+
+    </main><!-- end auth-page -->
+
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        // Toggle role UI
+        function selectRegisterRole(role, btnElement) {
+            document.querySelectorAll('.role-tab').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            btnElement.classList.add('active');
+            btnElement.setAttribute('aria-selected', 'true');
+
+            document.getElementById('regRole').value = role;
+            document.getElementById('regIdLabel').textContent = role === 'student' ? 'Roll Number' : 'Faculty ID';
+            document.getElementById('regId').placeholder = role === 'student' ? 'e.g. STU2024099' : 'e.g. FAC2024099';
+
+            const extras = document.getElementById('studentExtraFields');
+            if (extras) extras.style.display = role === 'student' ? 'block' : 'none';
+        }
+
+        // Handle Registration
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const pwd = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirm').value;
+            const matchError = document.getElementById('regMatchError');
+            const successAlert = document.getElementById('registerSuccess');
+            const btn = document.getElementById('registerBtn');
+
+            // Reset custom match error manually
+            matchError.classList.remove('visible');
+            successAlert.classList.add('hidden');
+
+            if (!validateForm(this)) return;
+
+            if (pwd !== confirm) {
+                matchError.classList.add('visible');
+                return;
+            }
+
+            // Structure new user object
+            const role = document.getElementById('regRole').value;
+            const newUser = {
+                id: document.getElementById('regId').value.trim(),
+                name: document.getElementById('regName').value.trim(),
+                email: document.getElementById('regEmail').value.trim(),
+                password: pwd, // Typically hashed in backend
+                role: role,
+                initials: document.getElementById('regName').value.trim().split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase(),
+                timestamp: new Date().toISOString()
+            };
+
+            if (role === 'student') {
+                newUser.program = document.getElementById('regProgram').value;
+                newUser.semester = document.getElementById('regSemester').value;
+                newUser.academic_year = document.getElementById('regAy').value.trim();
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = 'Submitting...';
+
+            fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newUser)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 201) {
+                    successAlert.classList.remove('hidden');
+                    this.reset();
+                    setTimeout(() => { successAlert.classList.add('hidden'); }, 5000);
+                } else {
+                    alert(data.message || 'Registration failed');
+                }
+            })
+            .catch(err => {
+                console.error("Registration error:", err);
+                alert('Network error. Is the backend running?');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = 'Submit Request &rarr;';
+            });
+        });
+    </script>
+</body>
+
+</html>

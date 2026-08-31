@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add Faculty — College ERP Management System">
+    <title>Add Faculty &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128084; Add New Faculty</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Register a new faculty member into the system.
+                        </p>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="window.history.back()">
+                        &larr; Back
+                    </button>
+                </div>
+
+                <div class="card" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-header">
+                        <h3>Faculty Registration Form</h3>
+                        <span class="badge badge-primary">Employee ID will be auto-generated</span>
+                    </div>
+                    <div class="card-body">
+
+                        <form id="addFacultyForm" novalidate>
+
+                            <h4 class="form-section-title">Personal Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="title">Title <span class="required">*</span></label>
+                                    <select class="form-control" id="title" required>
+                                        <option value="" disabled selected>Select Title</option>
+                                        <option value="Dr.">Dr.</option>
+                                        <option value="Prof.">Prof.</option>
+                                        <option value="Mr.">Mr.</option>
+                                        <option value="Ms.">Ms.</option>
+                                        <option value="Mrs.">Mrs.</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="firstName">First Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="First name"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="lastName">Last Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="Last name"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="gender">Gender <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="gender" required>
+                                        <option value="" disabled selected>Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <h4 class="form-section-title">Contact Information</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Institutional Email <span
+                                            class="required">*</span></label>
+                                    <input type="email" class="form-control" id="email"
+                                        placeholder="faculty@college.edu" required>
+                                    <div class="form-error">Valid email required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Mobile Number <span
+                                            class="required">*</span></label>
+                                    <input type="tel" class="form-control" id="phone" placeholder="10-digit number"
+                                        required pattern="[0-9]{10}">
+                                    <div class="form-error">Valid 10-digit number required.</div>
+                                </div>
+
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label class="form-label" for="address">Residential Address</label>
+                                    <textarea class="form-control" id="address" rows="2"
+                                        placeholder="Full address"></textarea>
+                                </div>
+                            </div>
+
+                            <h4 class="form-section-title">Academic & Employment Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="department">Department <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="department" required>
+                                        <option value="" disabled selected>Select Department</option>
+                                        <option value="Computer Applications">Computer Applications (MCA/BCA)</option>
+                                        <option value="Information Technology">Information Technology</option>
+                                        <option value="Management">Management (MBA/BBA)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="designation">Designation <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="designation" required>
+                                        <option value="" disabled selected>Select Designation</option>
+                                        <option value="Professor">Professor</option>
+                                        <option value="Associate Professor">Associate Professor</option>
+                                        <option value="Assistant Professor">Assistant Professor</option>
+                                        <option value="Lecturer">Lecturer</option>
+                                        <option value="Lab Assistant">Lab Assistant</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="qualification">Highest Qualification <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="qualification"
+                                        placeholder="e.g. Ph.D. in Computer Science" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="joinDate">Date of Joining <span
+                                            class="required">*</span></label>
+                                    <input type="date" class="form-control" id="joinDate" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group"
+                                style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                                <button type="reset" class="btn btn-outline">Reset</button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    &#10003; Register Faculty
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Add Faculty',
+            breadcrumb: 'Faculty > Add',
+            userRole: 'Admin'
+        });
+
+        document.getElementById('addFacultyForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            if (!validateForm(this)) return;
+
+            const btn = document.getElementById('submitBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Registering...';
+
+            const title = document.getElementById('title').value;
+            const fname = document.getElementById('firstName').value.trim();
+            const lname = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const dept = document.getElementById('department').value;
+
+            // Generate a random ID for faculty
+            const randomId = 'FAC' + new Date().getFullYear() + Math.floor(1000 + Math.random() * 9000);
+
+            const payload = {
+                id: randomId,
+                name: title + ' ' + fname + ' ' + lname,
+                email: email,
+                password: 'password123', // default generated password
+                role: 'faculty',
+                program: dept,
+                status: 'active' // Admin creates active faculty
+            };
+
+            try {
+                const res = await fetch('http://localhost:5000/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    ERP_Toast.show('Faculty registered successfully! ID: ' + randomId, 'success');
+                    this.reset();
+                    document.getElementById('joinDate').valueAsDate = new Date();
+                } else {
+                    const data = await res.json();
+                    ERP_Toast.show(data.message || 'Error registering faculty', 'error');
+                }
+            } catch (err) {
+                console.error("Error registering faculty:", err);
+                ERP_Toast.show('Network error. Backend not reachable.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        });
+
+        document.getElementById('joinDate').valueAsDate = new Date();
+    </script>
+
+</body>
+
+</html>

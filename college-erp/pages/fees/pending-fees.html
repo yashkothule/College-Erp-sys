@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pending Fees — College ERP Management System">
+    <title>Pending Fees &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128176; Outstanding Defaulters List</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Report of students with pending fee dues for the current term.
+                        </p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <a href="fee-payment.html" class="btn btn-outline">Collect Payment</a>
+                        <button class="btn btn-primary"
+                            onclick="ERP_Toast.show('Reminders sent to 2 students.', 'success')">
+                            &#128231; Send Email Reminders
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <h3>Pending Fees Report</h3>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <span class="text-muted" style="font-size:var(--font-size-sm);">Total Outstanding:</span>
+                            <strong style="color:var(--danger-color); font-size:1.1rem;">&#8377; 1,35,000</strong>
+                        </div>
+                    </div>
+
+                    <div class="card-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="erp-table">
+                                <thead>
+                                    <tr>
+                                        <th>Roll No.</th>
+                                        <th>Student Name</th>
+                                        <th>Department</th>
+                                        <th>Sem</th>
+                                        <th>Due Type</th>
+                                        <th style="text-align: right;">Amount Pending</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>STU2024004</strong></td>
+                                        <td>Vikas Mehta</td>
+                                        <td>MCA</td>
+                                        <td>4</td>
+                                        <td><span class="badge"
+                                                style="background:var(--bg-red); color:var(--danger-color);">Tuition
+                                                Fee</span></td>
+                                        <td style="text-align: right; color:var(--danger-color); font-weight:600;">
+                                            &#8377; 45,000</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline text-primary"
+                                                onclick="window.location.href='fee-payment.html?sid=STU2024004'">Pay
+                                                Now</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>STU2024021</strong></td>
+                                        <td>Ankit Deshmukh</td>
+                                        <td>BCA</td>
+                                        <td>2</td>
+                                        <td><span class="badge"
+                                                style="background:var(--bg-red); color:var(--danger-color);">Tuition
+                                                Fee</span></td>
+                                        <td style="text-align: right; color:var(--danger-color); font-weight:600;">
+                                            &#8377; 35,000</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline text-primary"
+                                                onclick="window.location.href='fee-payment.html?sid=STU2024021'">Pay
+                                                Now</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>STU2024045</strong></td>
+                                        <td>Pooja Agarwal</td>
+                                        <td>MBA</td>
+                                        <td>1</td>
+                                        <td><span class="badge"
+                                                style="background:var(--bg-gold); color:var(--text-gold);">Hostel
+                                                Dues</span></td>
+                                        <td style="text-align: right; color:var(--danger-color); font-weight:600;">
+                                            &#8377; 55,000</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline text-primary"
+                                                onclick="window.location.href='fee-payment.html?sid=STU2024045'">Pay
+                                                Now</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Pagination Snippet -->
+                    <div class="card-body"
+                        style="border-top: 1px solid var(--border-color); padding-top: 12px; padding-bottom: 12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="text-muted" style="font-size:var(--font-size-sm)">Showing 3 defaulters</span>
+                            <div class="pagination" style="margin-top:0;">
+                                <button disabled>&laquo;</button>
+                                <button class="active">1</button>
+                                <button disabled>&raquo;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Pending Fees',
+            breadcrumb: 'Fees > Pending Report',
+            userRole: 'Admin'
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Marks Entry — College ERP Management System">
+    <title>Marks Entry &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<script>if(localStorage.getItem('erp_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128203; Marks Entry</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Enter internal and external marks for students.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Pre-Selection Form -->
+                <div class="card mb-24">
+                    <div class="card-body">
+                        <form id="selectCourseForm" class="form-grid" style="align-items: end;">
+                            <div class="form-group">
+                                <label class="form-label">Program</label>
+                                <select class="form-control" required>
+                                    <option value="" disabled selected>Select Program</option>
+                                    <option value="MCA">MCA</option>
+                                    <option value="BCA">BCA</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Semester</label>
+                                <select class="form-control" required>
+                                    <option value="" disabled selected>Select Sem</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Course</label>
+                                <select class="form-control" id="courseSelect" required>
+                                    <option value="" disabled selected>Loading Courses...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Exam Type</label>
+                                <select class="form-control" id="examTypeSelect" required>
+                                    <option value="Internal">Internal (Mid-Sem)</option>
+                                    <option value="External" selected>External (End-Sem)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="padding-bottom: 2px;">
+                                <button type="button" class="btn btn-primary" style="width:100%"
+                                    onclick="fetchStudents()">Fetch List</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Marks Entry Table (Hidden initially by CSS, simulated by JS) -->
+                <div class="card" id="marksEntrySection" style="display: none;">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <div>
+                            <h3 style="margin-bottom: 4px;">CS401 - Database Management Systems</h3>
+                            <span class="text-muted" style="font-size: var(--font-size-sm);">MCA Semester 4 &bull;
+                                External Exam (Max: 70)</span>
+                        </div>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="erp-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 15%">Roll No.</th>
+                                        <th style="width: 30%">Student Name</th>
+                                        <th style="width: 25%">Marks Obtained</th>
+                                        <th style="width: 15%">Status</th>
+                                        <th style="width: 15%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="marksTableBody">
+                                    <!-- Dynamic rows will be rendered here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer"
+                        style="padding: 16px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px;">
+                        <button class="btn btn-outline"
+                            onclick="document.getElementById('marksEntrySection').style.display='none'">Cancel</button>
+                        <button class="btn btn-primary" onclick="submitMarks()">&#10003; Submit All Marks</button>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Marks Entry',
+            breadcrumb: 'Examination > Marks Entry',
+            userRole: 'Faculty'
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('http://localhost:5000/api/courses');
+                const data = await res.json();
+                const courses = data.data || [];
+                const cSelect = document.getElementById('courseSelect');
+                cSelect.innerHTML = '<option value="" disabled selected>Select Course</option>';
+                courses.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.code;
+                    opt.textContent = `${c.code} - ${c.title}`;
+                    cSelect.appendChild(opt);
+                });
+            } catch (err) {
+                console.error("Error loading courses:", err);
+            }
+        });
+
+        async function fetchStudents() {
+            const selects = document.querySelectorAll('#selectCourseForm select');
+            let valid = true;
+            // First 2 selects are Program and Sem
+            const program = selects[0].value;
+            const sem = selects[1].value;
+
+            selects.forEach(s => {
+                if (!s.value) {
+                    s.style.borderColor = 'var(--danger-color)';
+                    valid = false;
+                } else {
+                    s.style.borderColor = 'var(--border-color)';
+                }
+            });
+
+            if (valid) {
+                try {
+                    const res = await fetch('http://localhost:5000/api/users?role=student');
+                    const data = await res.json();
+                    const liveUsers = data.data || [];
+                    
+                    // Match students by program and sem
+                    let users = [];
+                    if(program && sem) {
+                        users = liveUsers.filter(u => u.program === program && String(u.semester) === String(sem));
+                    }
+
+                    const tbody = document.getElementById('marksTableBody');
+                    tbody.innerHTML = '';
+                
+                if (users.length === 0) {
+                     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center">No students found matching this criteria. Ensure students are registered.</td></tr>`;
+                } else {
+                     const isInternal = document.getElementById('examTypeSelect').value === 'Internal';
+                     const max = isInternal ? 30 : 70;
+                     users.forEach(u => {
+                         const tr = document.createElement('tr');
+                         tr.innerHTML = `
+                             <td>${u.id}</td>
+                             <td>${u.name}</td>
+                             <td>
+                                 <input type="number" class="form-control" style="width: 100px; padding: 6px;" min="0" max="${max}" placeholder="0">
+                             </td>
+                             <td><span class="badge badge-info">Pending</span></td>
+                             <td>
+                                 <label style="display:flex; align-items:center; gap:8px; font-size:var(--font-size-sm); cursor:pointer;">
+                                     <input type="checkbox" onchange="toggleAbsent(this)"> Mark Absent
+                                 </label>
+                             </td>
+                         `;
+                         tbody.appendChild(tr);
+                     });
+                }
+                
+                // Update table header text
+                const cSelect = document.getElementById('courseSelect');
+                document.querySelector('#marksEntrySection h3').textContent = cSelect.options[cSelect.selectedIndex].text;
+                
+                const examType = document.getElementById('examTypeSelect').value;
+                document.querySelector('#marksEntrySection .text-muted').innerHTML = `${program} Semester ${sem} &bull; ${examType} Exam`;
+
+                document.getElementById('marksEntrySection').style.display = 'block';
+                ERP_Toast.show('Student list fetched successfully.', 'success');
+                } catch(err) {
+                    console.error("Error fetching students:", err);
+                    ERP_Toast.show('Network error. Failed to load students.', 'error');
+                }
+            } else {
+                ERP_Toast.show('Please select all fields to fetch students.', 'error');
+            }
+        }
+
+        function toggleAbsent(cb) {
+            const input = cb.closest('tr').querySelector('input[type="number"]');
+            const badge = cb.closest('tr').querySelector('.badge');
+            if (cb.checked) {
+                input.disabled = true;
+                input.value = 0;
+                badge.className = 'badge badge-warning';
+                badge.textContent = 'Absent';
+            } else {
+                input.disabled = false;
+                badge.className = 'badge badge-info';
+                badge.textContent = 'Pending';
+            }
+        }
+
+        async function submitMarks() {
+            const tbody = document.getElementById('marksTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            if(rows.length === 0 || rows[0].cells.length === 1) return;
+
+            const courseCode = document.getElementById('courseSelect').value;
+            const examType = document.getElementById('examTypeSelect').value;
+            const maxMarks = examType === 'Internal' ? 30 : 70;
+            
+            const marksData = [];
+            
+            rows.forEach(tr => {
+                const studentId = tr.cells[0].textContent;
+                const input = tr.querySelector('input[type="number"]');
+                const isAbsent = tr.querySelector('input[type="checkbox"]').checked;
+                
+                marksData.push({
+                    studentId,
+                    marksObtained: isAbsent ? 0 : (parseInt(input.value) || 0),
+                    status: isAbsent ? 'Absent' : 'Present'
+                });
+            });
+
+            const btn = document.querySelector('#marksEntrySection .btn-primary');
+            const origText = btn.innerHTML;
+            btn.innerHTML = 'Submitting...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('http://localhost:5000/api/marks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        courseCode,
+                        examType,
+                        maxMarks,
+                        marks: marksData
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.status === 201) {
+                    ERP_Toast.show('Marks submitted successfully to the database.', 'success');
+                    setTimeout(() => {
+                        document.getElementById('marksEntrySection').style.display = 'none';
+                    }, 1500);
+                } else {
+                    ERP_Toast.show(data.message || 'Failed to submit marks.', 'error');
+                }
+            } catch (error) {
+                console.error("Submit Marks Error:", error);
+                ERP_Toast.show('Network error. Failed to submit marks.', 'error');
+            } finally {
+                btn.innerHTML = origText;
+                btn.disabled = false;
+            }
+        }
+
+        // Dynamic max marks placeholder logic
+        document.getElementById('examTypeSelect').addEventListener('change', function () {
+            const isInternal = this.value === 'Internal';
+            const max = isInternal ? 30 : 70;
+            document.querySelectorAll('#marksEntrySection input[type="number"]').forEach(input => {
+                input.max = max;
+            });
+            document.querySelector('#marksEntrySection .text-muted').innerHTML = `MCA Semester 4 &bull; ${this.value} Exam (Max: ${max})`;
+        });
+    </script>
+
+</body>
+
+</html>

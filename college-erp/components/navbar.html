@@ -1,0 +1,134 @@
+<!--
+  NAVBAR COMPONENT - College ERP Management System
+  File: components/navbar.html
+  Description: Reusable top navigation bar with search, notifications, user profile.
+  Usage: Include via JS fetch() or JSP include.
+  Note: In JSP Phase, replace with: <%@ include file="navbar.jsp" %>
+-->
+<header class="navbar" id="mainNavbar">
+
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggleBtn" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Page Title / Breadcrumb -->
+    <div class="navbar-title">
+        <h2 id="navbarPageTitle">Dashboard</h2>
+        <div class="breadcrumb-trail">
+            <span>Home</span>
+            <span>&rsaquo;</span>
+            <span class="active" id="navbarBreadcrumb">Dashboard</span>
+        </div>
+    </div>
+
+    <!-- Academic Year Badge -->
+    <div class="academic-year">&#128197; AY 2025&ndash;26</div>
+
+    <!-- Right Controls -->
+    <div class="navbar-right">
+
+        <!-- Notifications -->
+        <div class="nav-dropdown">
+            <button class="nav-icon-btn" id="notifBtn" title="Notifications" aria-label="Notifications">
+                &#128276;
+                <span class="badge-dot"></span>
+            </button>
+            <div class="nav-dropdown-menu" id="notifMenu">
+                <div class="dropdown-header">
+                    <h4>Notifications</h4>
+                    <a href="#">Mark all read</a>
+                </div>
+                <div class="notif-list">
+                    <div class="notif-item unread">
+                        <div class="notif-icon blue">&#128100;</div>
+                        <div class="notif-content">
+                            <p><strong>New student</strong> Priya Sharma registered in MCA Sem 3</p>
+                            <span>2 minutes ago</span>
+                        </div>
+                    </div>
+                    <div class="notif-item unread">
+                        <div class="notif-icon orange">&#128176;</div>
+                        <div class="notif-content">
+                            <p><strong>12 students</strong> have pending fee dues for this semester</p>
+                            <span>1 hour ago</span>
+                        </div>
+                    </div>
+                    <div class="notif-item">
+                        <div class="notif-icon green">&#127959;</div>
+                        <div class="notif-content">
+                            <p><strong>TCS</strong> registered for campus placement drive</p>
+                            <span>Yesterday</span>
+                        </div>
+                    </div>
+                    <div class="notif-item">
+                        <div class="notif-icon blue">&#128203;</div>
+                        <div class="notif-content">
+                            <p>Exam results for <strong>CS401</strong> have been published</p>
+                            <span>2 days ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full Screen Toggle -->
+        <button class="nav-icon-btn" id="fullscreenBtn" title="Fullscreen" aria-label="Toggle Fullscreen">
+            &#9974;
+        </button>
+
+        <!-- User Profile -->
+        <div class="user-profile nav-dropdown" id="userProfile">
+            <div class="user-avatar" id="navUserAvatar">AD</div>
+            <div class="user-info">
+                <span class="user-name" id="navUserName">Admin User</span>
+                <span class="user-role" id="navUserRole">Administrator</span>
+            </div>
+            <span class="caret">&#9660;</span>
+
+            <!-- User Dropdown Menu -->
+            <div class="user-menu" id="userMenu">
+                <div class="user-menu-header">
+                    <h4 id="dropdownUserName">Admin User</h4>
+                    <span id="dropdownUserEmail">admin@college.edu</span>
+                </div>
+                <div class="user-menu-item" id="dropdownProfileBtn">
+                    <i>&#128100;</i> My Profile
+                </div>
+                <div class="user-menu-item" id="dropdownSettingsBtn">
+                    <i>&#9881;</i> Settings
+                </div>
+                <div class="user-menu-item" id="dropdownPasswordBtn">
+                    <i>&#128274;</i> Change Password
+                </div>
+                <div class="user-menu-item danger" onclick="logout()">
+                    <i>&#128682;</i> Logout
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end navbar-right -->
+
+</header><!-- end navbar -->
+
+<script>
+    /* Fullscreen toggle */
+    document.getElementById('fullscreenBtn')?.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    });
+
+    /* Logout function */
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            // Clear session data (in real system, hit servlet endpoint)
+            sessionStorage.clear();
+            window.location.href = '../../index.html';
+        }
+    }
+</script>

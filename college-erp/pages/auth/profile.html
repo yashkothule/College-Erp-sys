@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="My Profile — College ERP Management System">
+    <title>My Profile &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<script>if(localStorage.getItem('erp_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128100; My Profile</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            View and manage your personal information.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-header" style="display: flex; align-items: center; gap: 20px;">
+                        <div style="width: 80px; height: 80px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold;"
+                            id="profileAvatar">U</div>
+                        <div>
+                            <h2 style="margin: 0;" id="profileName">User Name</h2>
+                            <p style="margin: 5px 0 0 0; color: var(--text-muted);" id="profileRole">Role</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="inputName" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="inputEmail" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">User ID / Roll No</label>
+                                <input type="text" class="form-control" id="inputId" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Role</label>
+                                <input type="text" class="form-control" id="inputRole" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'My Profile',
+            breadcrumb: 'Profile',
+            userRole: JSON.parse(sessionStorage.getItem('erp_user') || '{}').role || 'Student'
+        }).then(() => {
+            const user = JSON.parse(sessionStorage.getItem('erp_user') || '{}');
+
+            document.getElementById('profileAvatar').textContent = user.initials || 'U';
+            document.getElementById('profileName').textContent = user.name || 'User';
+            document.getElementById('profileRole').textContent = user.role || 'Role';
+
+            document.getElementById('inputName').value = user.name || '';
+            document.getElementById('inputEmail').value = user.email || '';
+            document.getElementById('inputId').value = user.id || '';
+            document.getElementById('inputRole').value = user.role || '';
+        });
+    </script>
+</body>
+
+</html>

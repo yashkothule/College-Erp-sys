@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add Student — College ERP Management System">
+    <title>Add Student &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <!-- Navbar -->
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128107; Add New Student</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Enroll a new student into the college system.
+                        </p>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="window.history.back()">
+                        &larr; Back
+                    </button>
+                </div>
+
+                <!-- Add Student Form Card -->
+                <div class="card" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-header">
+                        <h3>Student Enrollment Form</h3>
+                        <span class="badge badge-primary">Academic Year: 2025-26</span>
+                    </div>
+                    <div class="card-body">
+
+                        <form id="addStudentForm" novalidate>
+
+                            <!-- Personal Details Section -->
+                            <h4 class="form-section-title">Personal Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="firstName">First Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="firstName"
+                                        placeholder="Enter first name" required>
+                                    <div class="form-error">First name is required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="lastName">Last Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="Enter last name"
+                                        required>
+                                    <div class="form-error">Last name is required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="dob">Date of Birth <span
+                                            class="required">*</span></label>
+                                    <input type="date" class="form-control" id="dob" required>
+                                    <div class="form-error">Date of birth is required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="gender">Gender <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="gender" required>
+                                        <option value="" disabled selected>Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <div class="form-error">Please select a gender.</div>
+                                </div>
+                            </div>
+
+                            <!-- Contact Details Section -->
+                            <h4 class="form-section-title">Contact Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email Address <span
+                                            class="required">*</span></label>
+                                    <input type="email" class="form-control" id="email"
+                                        placeholder="student@example.com" required>
+                                    <div class="form-error">Valid email is required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Phone Number <span
+                                            class="required">*</span></label>
+                                    <input type="tel" class="form-control" id="phone" placeholder="10-digit number"
+                                        required pattern="[0-9]{10}">
+                                    <div class="form-error">Valid 10-digit phone number is required.</div>
+                                </div>
+
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label class="form-label" for="address">Residential Address <span
+                                            class="required">*</span></label>
+                                    <textarea class="form-control" id="address" rows="3"
+                                        placeholder="Enter full address" required></textarea>
+                                    <div class="form-error">Address is required.</div>
+                                </div>
+                            </div>
+
+                            <!-- Academic Details Section -->
+                            <h4 class="form-section-title">Academic Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="department">Department <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="department" required>
+                                        <option value="" disabled selected>Select Department</option>
+                                        <option value="MCA">MCA</option>
+                                        <option value="BCA">BCA</option>
+                                        <option value="MBA">MBA</option>
+                                        <option value="BScIT">B.Sc. IT</option>
+                                    </select>
+                                    <div class="form-error">Please select a department.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="semester">Semester <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="semester" required>
+                                        <option value="" disabled selected>Select Semester</option>
+                                        <option value="1">Semester 1</option>
+                                        <option value="2">Semester 2</option>
+                                        <option value="3">Semester 3</option>
+                                        <option value="4">Semester 4</option>
+                                        <option value="5">Semester 5</option>
+                                        <option value="6">Semester 6</option>
+                                    </select>
+                                    <div class="form-error">Please select a semester.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="admissionDate">Admission Date <span
+                                            class="required">*</span></label>
+                                    <input type="date" class="form-control" id="admissionDate" required>
+                                    <div class="form-error">Admission date is required.</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group"
+                                style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                                <button type="reset" class="btn btn-outline">Reset Form</button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    &#10003; Enroll Student
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- Footer -->
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Add Student',
+            breadcrumb: 'Students > Add',
+            userRole: 'Admin'
+        });
+
+        // Form submission processing
+        document.getElementById('addStudentForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            if (!validateForm(this)) return;
+
+            const btn = document.getElementById('submitBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Enrolling...';
+
+            const fname = document.getElementById('firstName').value.trim();
+            const lname = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const dept = document.getElementById('department').value;
+            const sem = document.getElementById('semester').value;
+
+            // Generate a random ID for student
+            const randomId = 'STU' + new Date().getFullYear() + Math.floor(1000 + Math.random() * 9000);
+
+            const payload = {
+                id: randomId,
+                name: fname + ' ' + lname,
+                email: email,
+                password: 'password123', // default generated password
+                role: 'student',
+                program: dept,
+                semester: sem,
+                academic_year: '2025-26',
+                status: 'active' // Admin creates active users
+            };
+
+            try {
+                const res = await fetch('http://localhost:5000/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    ERP_Toast.show('Student enrolled successfully! ID: ' + randomId, 'success');
+                    this.reset();
+                    document.getElementById('admissionDate').valueAsDate = new Date(); // reset date
+                } else {
+                    const data = await res.json();
+                    ERP_Toast.show(data.message || 'Error enrolling student', 'error');
+                }
+            } catch (err) {
+                console.error("Error enrolling student:", err);
+                ERP_Toast.show('Network error. Backend not reachable.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        });
+
+        // Set today's date as default admission date
+        document.getElementById('admissionDate').valueAsDate = new Date();
+    </script>
+
+</body>
+
+</html>

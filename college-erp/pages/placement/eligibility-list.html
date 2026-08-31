@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Student Eligibility List — College ERP Management System">
+    <title>Eligibility List &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<script>if(localStorage.getItem('erp_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header" style="justify-content: space-between;">
+                    <div>
+                        <h1>&#128203; Student Eligibility List</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Filter students eligible for specific recruitment drives.
+                        </p>
+                    </div>
+                    <button class="btn btn-outline" onclick="window.print()">
+                        &#128424; Export / Print
+                    </button>
+                </div>
+
+                <div class="card mb-24 print-hide">
+                    <div class="card-body">
+                        <form class="form-grid" style="align-items: end;">
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label class="form-label">Select Company Drive</label>
+                                <select class="form-control" onchange="loadCriteria(this)" required>
+                                    <option value="" disabled selected>-- Select Drive --</option>
+                                    <option value="1" data-cgpa="7.5" data-progs="MCA, BCA">GlobalTech Infosystems
+                                        (Software Dev)</option>
+                                    <option value="2" data-cgpa="6.5" data-progs="MBA">NextGen Finance (Business
+                                        Analyst)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="padding-bottom: 2px;">
+                                <button type="button" class="btn btn-primary" style="width:100%"
+                                    onclick="fetchList()">Generate List</button>
+                            </div>
+                        </form>
+
+                        <!-- Criteria Snapshot -->
+                        <div id="criteriaSnapshot"
+                            style="display:none; margin-top: 16px; padding: 12px; background: var(--hover-color); border-radius: var(--border-radius); border-left: 3px solid var(--primary-color);">
+                            <strong style="margin-right: 12px;">Applied Criteria:</strong>
+                            <span style="margin-right: 16px;">Minimum CGPA: <span id="lblCgpa"
+                                    class="badge badge-primary"></span></span>
+                            <span>Programs: <span id="lblProgs" class="badge"
+                                    style="background:var(--bg-blue); color:var(--text-blue);"></span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List Display -->
+                <div class="card" id="listSection" style="display: none;">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <h3>Eligible Candidates</h3>
+                        <span class="badge badge-success" id="countBadge">0 Students Found</span>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="erp-table">
+                                <thead>
+                                    <tr>
+                                        <th>Roll No.</th>
+                                        <th>Student Name</th>
+                                        <th>Program</th>
+                                        <th>Current CGPA</th>
+                                        <th>Backlogs</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="eligibilityTableBody">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container" class="print-hide"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Eligibility List',
+            breadcrumb: 'Placement > Filter Students',
+            userRole: 'Admin'
+        });
+
+        function loadCriteria(select) {
+            if (!select.value) return;
+            const opt = select.options[select.selectedIndex];
+            document.getElementById('criteriaSnapshot').style.display = 'block';
+            document.getElementById('lblCgpa').textContent = opt.dataset.cgpa;
+            document.getElementById('lblProgs').textContent = opt.dataset.progs;
+            document.getElementById('listSection').style.display = 'none'; // hide until clicked
+        }
+
+        // Mock Database
+        const studentsData = [
+            { roll: "STU2024001", name: "Priya Sharma", prog: "MCA", cgpa: 8.4, back: 0 },
+            { roll: "STU2024002", name: "Rahul Kumar", prog: "BCA", cgpa: 6.8, back: 1 },
+            { roll: "STU2024005", name: "Sneha Joshi", prog: "MCA", cgpa: 9.1, back: 0 },
+            { roll: "STU2024012", name: "Amit Verma", prog: "MBA", cgpa: 7.2, back: 0 },
+            { roll: "STU2024018", name: "Pooja Desai", prog: "MBA", cgpa: 6.1, back: 0 }
+        ];
+
+        function fetchList() {
+            const sel = document.querySelector('select');
+            if (!sel.value) {
+                ERP_Toast.show('Please select a drive first.', 'error');
+                return;
+            }
+
+            const opt = sel.options[sel.selectedIndex];
+            const reqCgpa = parseFloat(opt.dataset.cgpa);
+            const reqProgs = opt.dataset.progs;
+
+            const filtered = studentsData.filter(s => s.cgpa >= reqCgpa && reqProgs.includes(s.prog) && s.back === 0);
+
+            const tbody = document.getElementById('eligibilityTableBody');
+            tbody.innerHTML = ''; // clear
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 24px;">No eligible students found matching criteria.</td></tr>`;
+            } else {
+                filtered.forEach(s => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                    <td><strong>${s.roll}</strong></td>
+                    <td>${s.name}</td>
+                    <td>${s.prog}</td>
+                    <td><strong style="color:var(--success-color)">${s.cgpa}</strong></td>
+                    <td>${s.back}</td>
+                    <td class="print-hide"><button class="btn btn-sm btn-outline text-primary">View Profile</button></td>
+                `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('countBadge').textContent = `${filtered.length} Students Found`;
+            document.getElementById('listSection').style.display = 'block';
+
+            ERP_Toast.show(`Generated list with ${filtered.length} eligible students.`, 'success');
+        }
+    </script>
+
+    <style>
+        @media print {
+
+            .print-hide,
+            .sidebar,
+            .erp-header {
+                display: none !important;
+            }
+
+            .erp-main {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+
+            .erp-content {
+                padding: 0 !important;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+        }
+    </style>
+
+</body>
+
+</html>

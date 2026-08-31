@@ -1,0 +1,408 @@
+/* ============================================================
+   NAVBAR CSS - College ERP Management System
+   File: assets/css/navbar.css
+   Description: Top navigation bar styles
+   ============================================================ */
+
+/* ---- Navbar Container ---- */
+.navbar {
+    height: var(--navbar-height);
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    z-index: 9999;
+    box-shadow: var(--card-shadow);
+    transition: left 0.3s ease;
+}
+
+.navbar.sidebar-collapsed {
+    left: var(--sidebar-collapsed-width);
+}
+
+/* ---- Sidebar Toggle ---- */
+.sidebar-toggle {
+    background: none;
+    border: none;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: background 0.2s;
+    flex-shrink: 0;
+    padding: 4px;
+}
+
+.sidebar-toggle:hover {
+    background: var(--bg-light);
+}
+
+.sidebar-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text-dark);
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+/* ---- Navbar Brand (mobile) ---- */
+.navbar-brand {
+    display: none;
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* ---- Navbar Page Title ---- */
+.navbar-title {
+    flex: 1;
+}
+
+.navbar-title h2 {
+    font-size: var(--font-size-md);
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.navbar-title .breadcrumb-trail {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.navbar-title .breadcrumb-trail .active {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* ---- Navbar Right ---- */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ---- Navbar Icon Button ---- */
+.nav-icon-btn {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.05rem;
+}
+
+.nav-icon-btn:hover {
+    background: var(--bg-light);
+    color: var(--primary-color);
+}
+
+.nav-icon-btn .badge-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background: var(--danger);
+    border-radius: 50%;
+    border: 2px solid var(--white);
+}
+
+/* ---- Notification Dropdown ---- */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--card-shadow-hover);
+    border: 1px solid var(--border-color);
+    min-width: 280px;
+    z-index: 999;
+    animation: dropdownIn 0.2s ease;
+}
+
+.nav-dropdown-menu.active {
+    display: block;
+}
+
+@keyframes dropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-header h4 {
+    font-size: var(--font-size-sm);
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.dropdown-header a {
+    font-size: var(--font-size-xs);
+}
+
+.notif-list {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.notif-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.notif-item:hover {
+    background: var(--bg-light);
+}
+
+.notif-item:last-child {
+    border-bottom: none;
+}
+
+.notif-item.unread {
+    background: var(--info-bg);
+}
+
+.notif-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.notif-icon.blue {
+    background: var(--info-bg);
+    color: var(--primary-color);
+}
+
+.notif-icon.green {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.notif-icon.orange {
+    background: var(--warning-bg);
+    color: var(--warning);
+}
+
+.notif-content p {
+    font-size: var(--font-size-xs);
+    color: var(--text-body);
+    line-height: 1.4;
+}
+
+.notif-content span {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+    display: block;
+}
+
+/* ---- User Profile Dropdown ---- */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 10px 5px 5px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.user-profile:hover {
+    border-color: var(--primary-light);
+    background: var(--bg-light);
+}
+
+.user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.user-info .user-name {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
+.user-info .user-role {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.user-profile .caret {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+}
+
+/* ---- User Dropdown Menu ---- */
+.user-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--card-shadow-hover);
+    border: 1px solid var(--border-color);
+    min-width: 210px;
+    z-index: 99999;
+    overflow: hidden;
+    animation: dropdownIn 0.2s ease;
+}
+
+.user-menu.active {
+    display: block;
+}
+
+.user-menu-header {
+    padding: 14px 16px;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.user-menu-header h4 {
+    font-size: var(--font-size-sm);
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.user-menu-header span {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    color: var(--text-body);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: background 0.15s;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.user-menu-item:last-child {
+    border-bottom: none;
+}
+
+.user-menu-item:hover {
+    background: var(--bg-light);
+    color: var(--primary-color);
+}
+
+.user-menu-item.danger:hover {
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+.user-menu-item i {
+    width: 16px;
+    font-size: 0.9rem;
+}
+
+/* ---- Academic Year Badge ---- */
+.academic-year {
+    background: var(--info-bg);
+    color: var(--info);
+    font-size: var(--font-size-xs);
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-weight: 600;
+    border: 1px solid rgba(40, 116, 166, 0.2);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 992px) {
+    .navbar {
+        left: var(--sidebar-collapsed-width);
+    }
+
+    .academic-year {
+        display: none;
+    }
+
+    .user-info {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar {
+        padding: 0 14px;
+    }
+
+    .nav-icon-btn:not(:last-of-type) {
+        display: none;
+    }
+}

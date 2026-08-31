@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Company Registration — College ERP Management System">
+    <title>Company Registration &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<script>if(localStorage.getItem('erp_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#127970; Company Registration</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Register recruiters and placement drives.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-header">
+                        <h3>Recruitment Drive Details</h3>
+                        <span class="badge badge-primary">Drive Year: 2025</span>
+                    </div>
+
+                    <div class="card-body">
+                        <form id="addCompanyForm" novalidate>
+
+                            <h4 class="form-section-title">Company Profile</h4>
+                            <div class="form-grid">
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label class="form-label" for="compName">Company Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="compName"
+                                        placeholder="e.g. TechCorp Solutions" required>
+                                    <div class="form-error">Required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="industry">Industry Type <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="industry" required>
+                                        <option value="" disabled selected>Select Industry</option>
+                                        <option value="IT/Software">IT / Software / Services</option>
+                                        <option value="Finance">Banking / Finance / FinTech</option>
+                                        <option value="Consulting">Consulting / Management</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="website">Website URL</label>
+                                    <input type="url" class="form-control" id="website" placeholder="https://www...">
+                                </div>
+                            </div>
+
+                            <h4 class="form-section-title">Drive Details & Eligibility</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="jobRole">Job Role / Designation <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="jobRole"
+                                        placeholder="e.g. Software Engineer Trainee" required>
+                                    <div class="form-error">Required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="package">Package Config (LPA) <span
+                                            class="required">*</span></label>
+                                    <input type="number" class="form-control" id="package" step="0.1" min="1"
+                                        placeholder="e.g. 6.5" required>
+                                    <div class="form-error">Required.</div>
+                                </div>
+
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label class="form-label">Eligible Programs <span class="required">*</span></label>
+                                    <div style="display:flex; gap:16px; margin-top: 8px;">
+                                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input
+                                                type="checkbox" name="prog" value="MCA"> MCA</label>
+                                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input
+                                                type="checkbox" name="prog" value="BCA"> BCA</label>
+                                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input
+                                                type="checkbox" name="prog" value="MBA"> MBA</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="minCgpa">Minimum CGPA Required <span
+                                            class="required">*</span></label>
+                                    <input type="number" class="form-control" id="minCgpa" step="0.1" min="5" max="10"
+                                        placeholder="e.g. 7.5" required>
+                                    <div class="form-error">Valid CGPA required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="driveDate">Date of Drive</label>
+                                    <input type="date" class="form-control" id="driveDate">
+                                </div>
+                            </div>
+
+                            <div class="form-group"
+                                style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                                <button type="reset" class="btn btn-outline">Reset Form</button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    &#10003; Register Drive
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Recent Drives List -->
+                <div class="card mt-24">
+                    <div class="card-header">
+                        <h3>Upcoming & Recent Drives</h3>
+                    </div>
+                    <div class="card-body" style="padding:0">
+                        <div class="table-responsive">
+                            <table class="erp-table">
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Role</th>
+                                        <th>Package (LPA)</th>
+                                        <th>Min CGPA</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="driveTableBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align:center; padding: 2rem;">Loading drives...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Company Registration',
+            breadcrumb: 'Placement > Registration',
+            userRole: 'Admin'
+        });
+
+        async function loadDrives() {
+            const tbody = document.getElementById('driveTableBody');
+            try {
+                const res = await fetch('http://localhost:5000/api/companies');
+                const data = await res.json();
+                const drives = data.data || [];
+
+                if (drives.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem;">No drives registered yet.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                drives.forEach(d => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${d.compName}</strong></td>
+                        <td>${d.role}</td>
+                        <td>${d.package}</td>
+                        <td>${d.minCgpa}</td>
+                        <td>${d.drive_date || 'TBD'}</td>
+                        <td><button class="btn btn-sm btn-outline text-danger" onclick="deleteDrive(${d.id})">Delete</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Error loading drives:", err);
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Failed to retrieve data from backend.</td></tr>`;
+            }
+        }
+
+        loadDrives();
+
+        async function deleteDrive(id) {
+            if (confirm('Remove this recruitment drive?')) {
+                try {
+                    const res = await fetch(`http://localhost:5000/api/companies/${id}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        ERP_Toast.show('Drive removed.', 'success');
+                        loadDrives();
+                    } else {
+                        ERP_Toast.show('Error removing drive.', 'error');
+                    }
+                } catch (err) {
+                    ERP_Toast.show('Network error.', 'error');
+                }
+            }
+        }
+
+        document.getElementById('addCompanyForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            let valid = validateForm(this);
+            const checkboxes = document.querySelectorAll('input[name="prog"]:checked');
+            if (checkboxes.length === 0) {
+                ERP_Toast.show('Please select at least one eligible program.', 'error');
+                valid = false;
+            }
+            if (!valid) return;
+
+            const btn = document.getElementById('submitBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Registering...';
+
+            const payload = {
+                compName: document.getElementById('compName').value,
+                role: document.getElementById('jobRole').value,
+                package: parseFloat(document.getElementById('package').value),
+                minCgpa: parseFloat(document.getElementById('minCgpa').value),
+                drive_date: document.getElementById('driveDate').value || null
+            };
+
+            try {
+                const res = await fetch('http://localhost:5000/api/companies', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    ERP_Toast.show('Company drive registered successfully!', 'success');
+                    this.reset();
+                    loadDrives();
+                } else {
+                    const data = await res.json();
+                    ERP_Toast.show(data.message || 'Error registering drive', 'error');
+                }
+            } catch (err) {
+                console.error("Error registering drive:", err);
+                ERP_Toast.show('Network error. Backend not reachable.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Placement Status â€” College ERP Management System">
+    <title>Placement Status &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+    <link rel="stylesheet" href="../../assets/css/dashboard.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸŽ“</text></svg>">
+<script>if(localStorage.getItem('erp_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header" style="justify-content: space-between;">
+                    <div>
+                        <h1>&#127959; Placement Records</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Track placed students and update offer details.
+                        </p>
+                    </div>
+                    <!-- Student View Component -->
+                    <button class="btn btn-outline" onclick="toggleStudentView()" id="viewToggleBtn">
+                        ðŸ‘¤ Switch to Student View
+                    </button>
+                </div>
+
+                <!-- Dashboard view for Admin/TPO -->
+                <div id="adminView">
+                    <div class="stats-grid" style="margin-bottom: 24px;">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">&#128107;</div>
+                            <div class="stat-info">
+                                <h3>145</h3>
+                                <p>Total Eligible</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">&#127942;</div>
+                            <div class="stat-info">
+                                <h3>82</h3>
+                                <p>Placed Students</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon gold">&#128181;</div>
+                            <div class="stat-info">
+                                <h3>14 LPA</h3>
+                                <p>Highest Package</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">&#128200;</div>
+                            <div class="stat-info">
+                                <h3>56%</h3>
+                                <p>Placement Rate</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" style="display:flex; gap:16px; flex-wrap:wrap;">
+                            <h3 style="margin-right: auto;">Placed Candidates Directory</h3>
+                            <div class="search-box" style="margin: 0; min-width: 250px;">
+                                <span class="search-icon">&#128269;</span>
+                                <input type="text" id="recordSearch" placeholder="Search name or company...">
+                            </div>
+                            <button class="btn btn-primary"
+                                onclick="ERP_Toast.show('Modal to add offer letter will open.', 'info')">&#43; Add
+                                Record</button>
+                        </div>
+
+                        <div class="card-body" style="padding: 0;">
+                            <div class="table-responsive">
+                                <table class="erp-table" id="recordTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Roll No.</th>
+                                            <th>Student Name</th>
+                                            <th>Program</th>
+                                            <th>Company Placed</th>
+                                            <th>Role</th>
+                                            <th>Package (LPA)</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>STU2024001</td>
+                                            <td>Priya Sharma</td>
+                                            <td>MCA</td>
+                                            <td><strong>GlobalTech Infosystems</strong></td>
+                                            <td>Software Developer</td>
+                                            <td><span style="color:var(--success-color); font-weight: bold;">8.5</span>
+                                            </td>
+                                            <td><span class="badge badge-success">Offer Accepted</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>STU2024012</td>
+                                            <td>Amit Verma</td>
+                                            <td>MBA</td>
+                                            <td><strong>NextGen Finance</strong></td>
+                                            <td>Business Analyst</td>
+                                            <td><span style="color:var(--success-color); font-weight: bold;">6.0</span>
+                                            </td>
+                                            <td><span class="badge badge-success">Offer Accepted</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>STU2024033</td>
+                                            <td>Neha Gupta</td>
+                                            <td>BCA</td>
+                                            <td><strong>CodeCrafters Inc</strong></td>
+                                            <td>Frontend Engineer</td>
+                                            <td><span style="color:var(--success-color); font-weight: bold;">5.5</span>
+                                            </td>
+                                            <td><span class="badge badge-warning">Offer Pending</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student View (Mockup of what a student sees) -->
+                <div id="studentView" style="display: none;">
+
+                    <div class="welcome-banner"
+                        style="background: linear-gradient(135deg, var(--primary-color) 0%, #2a5298 100%);">
+                        <div class="welcome-text">
+                            <h2>Congratulations, Priya! &#127881;</h2>
+                            <p>You have successfully secured a placement offer.</p>
+                        </div>
+                        <div class="welcome-image" style="font-size: 80px;" aria-hidden="true">&#127942;</div>
+                    </div>
+
+                    <div class="card p-24" style="max-width: 600px; margin: 0 auto; text-align: center;">
+                        <br>
+                        <div
+                            style="width: 80px; height: 80px; background: #e8f5e9; color: var(--success-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 16px auto;">
+                            &#10003;
+                        </div>
+                        <h3 style="margin-bottom: 8px;">Offer Accepted</h3>
+                        <p class="text-muted" style="margin-bottom: 24px;">Your response has been recorded by the
+                            Training and Placement Cell.</p>
+
+                        <div
+                            style="text-align: left; background: var(--hover-color); padding: 16px; border-radius: var(--border-radius); border-left: 4px solid var(--primary-color); margin-bottom: 24px;">
+                            <p style="margin-bottom: 8px;"><strong>Company:</strong> GlobalTech Infosystems</p>
+                            <p style="margin-bottom: 8px;"><strong>Designation:</strong> Software Developer</p>
+                            <p style="margin-bottom: 8px;"><strong>Package Offered:</strong> 8.5 LPA</p>
+                            <p style="margin-bottom: 0px;"><strong>Date of Interview:</strong> 15 Nov 2024</p>
+                        </div>
+
+                        <button class="btn btn-outline" style="width: 100%;">
+                            &#128196; Download Offer Letter
+                        </button>
+                        <br><br>
+                    </div>
+
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header" style="justify-content: space-between;">
+                    <div>
+                        <h1>&#127959; Placement Records</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Track placed students and update offer details.
+                        </p>
+                    </div>
+                    <!-- Student View Component -->
+                    <button class="btn btn-outline" onclick="toggleStudentView()" id="viewToggleBtn">
+                        ðŸ‘¤ Switch to Student View
+                    </button>
+                </div>
+
+                <!-- Dashboard view for Admin/TPO -->
+                <div id="adminView">
+                    <div class="stats-grid" style="margin-bottom: 24px;">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">&#128107;</div>
+                            <div class="stat-info">
+                                <h3 id="totalEligible">145</h3>
+                                <p>Total Eligible</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">&#127942;</div>
+                            <div class="stat-info">
+                                <h3 id="totalDrives">82</h3>
+                                <p>Placed Students</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon gold">&#128181;</div>
+                            <div class="stat-info">
+                                <h3 id="highestPkg">14 LPA</h3>
+                                <p>Highest Package</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">&#128200;</div>
+                            <div class="stat-info">
+                                <h3>56%</h3>
+                                <p>Placement Rate</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" style="display:flex; gap:16px; flex-wrap:wrap;">
+                            <h3 style="margin-right: auto;">Placed Candidates Directory</h3>
+                            <div class="search-box" style="margin: 0; min-width: 250px;">
+                                <span class="search-icon">&#128269;</span>
+                                <input type="text" id="recordSearch" placeholder="Search name or company...">
+                            </div>
+                            <button class="btn btn-primary"
+                                onclick="ERP_Toast.show('Modal to add offer letter will open.', 'info')">&#43; Add
+                                Record</button>
+                        </div>
+
+                        <div class="card-body" style="padding: 0;">
+                            <div class="table-responsive">
+                                <table class="erp-table" id="recordTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Roll No.</th>
+                                            <th>Student Name</th>
+                                            <th>Program</th>
+                                            <th>Company Placed</th>
+                                            <th>Role</th>
+                                            <th>Package (LPA)</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>STU2024001</td>
+                                            <td>Priya Sharma</td>
+                                            <td>MCA</td>
+                                            <td><strong>GlobalTech Infosystems</strong></td>
+                                            <td>Software Developer</td>
+                                            <td><span style="color:var(--success-color); font-weight: bold;">8.5</span>
+                                            </td>
+                                            <td><span class="badge badge-success">Offer Accepted</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>STU2024012</td>
+                                            <td>Amit Verma</td>
+                                            <td>MBA</td>
+                                            <td><strong>NextGen Finance</strong></td>
+                                            <td>Business Analyst</td>
+                                            <td><span style="color:var(--success-color); font-weight: bold;">6.0</span>
+                                            </td>
+                                            <td><span class="badge badge-success">Offer Accepted</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>STU2024033</td>
+                                            <td>Neha Gupta</td>
+                                            <td>BCA</td>
+                                            <td><strong>CodeCrafters Inc</strong></td>
+                                            <td>Frontend Engineer</td>
+                                            <td><span style="color:var(--success-color); font-weight: bold;">5.5</span>
+                                            </td>
+                                            <td><span class="badge badge-warning">Offer Pending</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student View (Mockup of what a student sees) -->
+                <div id="studentView" style="display: none;">
+
+                    <div class="welcome-banner"
+                        style="background: linear-gradient(135deg, var(--primary-color) 0%, #2a5298 100%);">
+                        <div class="welcome-text">
+                            <h2>Congratulations, Priya! &#127881;</h2>
+                            <p>You have successfully secured a placement offer.</p>
+                        </div>
+                        <div class="welcome-image" style="font-size: 80px;" aria-hidden="true">&#127942;</div>
+                    </div>
+
+                    <div class="card p-24" style="max-width: 600px; margin: 0 auto; text-align: center;">
+                        <br>
+                        <div
+                            style="width: 80px; height: 80px; background: #e8f5e9; color: var(--success-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 16px auto;">
+                            &#10003;
+                        </div>
+                        <h3 style="margin-bottom: 8px;">Offer Accepted</h3>
+                        <p class="text-muted" style="margin-bottom: 24px;">Your response has been recorded by the
+                            Training and Placement Cell.</p>
+
+                        <div
+                            style="text-align: left; background: var(--hover-color); padding: 16px; border-radius: var(--border-radius); border-left: 4px solid var(--primary-color); margin-bottom: 24px;">
+                            <p style="margin-bottom: 8px;"><strong>Company:</strong> GlobalTech Infosystems</p>
+                            <p style="margin-bottom: 8px;"><strong>Designation:</strong> Software Developer</p>
+                            <p style="margin-bottom: 8px;"><strong>Package Offered:</strong> 8.5 LPA</p>
+                            <p style="margin-bottom: 0px;"><strong>Date of Interview:</strong> 15 Nov 2024</p>
+                        </div>
+
+                        <button class="btn btn-outline" style="width: 100%;">
+                            &#128196; Download Offer Letter
+                        </button>
+                        <br><br>
+                    </div>
+
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Placement Status',
+            breadcrumb: 'Placement > Status',
+            userRole: 'Admin'
+        });
+
+        // Sub-UI switch logic
+        function toggleStudentView() {
+            const adminDiv = document.getElementById('adminView');
+            const stuDiv = document.getElementById('studentView');
+            const btn = document.getElementById('viewToggleBtn');
+
+            if (adminDiv.style.display === 'none') {
+                adminDiv.style.display = 'block';
+                stuDiv.style.display = 'none';
+                btn.innerHTML = '👤 Switch to Student View';
+                document.querySelector('.page-header h1').innerHTML = '&#127959; Placement Records';
+            } else {
+                adminDiv.style.display = 'none';
+                stuDiv.style.display = 'block';
+                btn.innerHTML = '🛡️ Switch to Admin View';
+                document.querySelector('.page-header h1').innerHTML = '&#127959; My Placement Status';
+            }
+        }
+
+        // Load real stats from backend
+        async function loadStats() {
+            try {
+                const [stuRes, compRes] = await Promise.all([
+                    fetch('http://localhost:5000/api/users?role=student'),
+                    fetch('http://localhost:5000/api/companies')
+                ]);
+                const stuData = await stuRes.json();
+                const compData = await compRes.json();
+
+                const students = stuData.data || [];
+                const companies = compData.data || [];
+
+                document.getElementById('totalEligible').textContent = students.length;
+                document.getElementById('totalDrives').textContent = companies.length;
+
+                const maxPkg = companies.reduce((max, c) => Math.max(max, parseFloat(c.package) || 0), 0);
+                document.getElementById('highestPkg').textContent = maxPkg > 0 ? maxPkg + ' LPA' : 'N/A';
+            } catch (err) {
+                console.error("Error loading stats:", err);
+            }
+        }
+
+        loadStats();
+
+        // Search Init for Admin Table
+        setTimeout(() => {
+            if (typeof initTableSearch === 'function') {
+                initTableSearch('recordSearch', 'recordTable', [1, 3]);
+            }
+        }, 100);
+    </script>
+
+</body>
+
+</html>

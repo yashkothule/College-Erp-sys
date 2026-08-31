@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Update Student — College ERP Management System">
+    <title>Update Student &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<script>if(localStorage.getItem('erp_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <!-- Navbar -->
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#9998; Update Student Profile</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Modify existing student details.
+                        </p>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="window.history.back()">
+                        &larr; Back to List
+                    </button>
+                </div>
+
+                <div class="card" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <h3>Edit Profile: <span id="displayStuName">Priya Sharma</span></h3>
+                        <span class="badge badge-primary">STU2024001</span>
+                    </div>
+                    <div class="card-body">
+
+                        <form id="updateStudentForm" novalidate>
+
+                            <h4 class="form-section-title mt-8">Personal Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="firstName">First Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="firstName" value="Priya" required>
+                                    <div class="form-error">Required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="lastName">Last Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="lastName" value="Sharma" required>
+                                    <div class="form-error">Required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="status">Account Status <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="status" required>
+                                        <option value="Active" selected>Active</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="OnHold">On Hold</option>
+                                        <option value="Graduated">Graduated</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <h4 class="form-section-title">Contact Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email Address <span
+                                            class="required">*</span></label>
+                                    <input type="email" class="form-control" id="email" value="priya@college.edu"
+                                        required>
+                                    <div class="form-error">Valid email required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Phone Number <span
+                                            class="required">*</span></label>
+                                    <input type="tel" class="form-control" id="phone" value="9876543210" required
+                                        pattern="[0-9]{10}">
+                                    <div class="form-error">Valid 10-digit number required.</div>
+                                </div>
+
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label class="form-label" for="address">Residential Address <span
+                                            class="required">*</span></label>
+                                    <textarea class="form-control" id="address" rows="3"
+                                        required>12/4, MG Road, Silicon Valley, Cyber City 400010</textarea>
+                                    <div class="form-error">Address is required.</div>
+                                </div>
+                            </div>
+
+                            <h4 class="form-section-title">Academic Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="department">Department <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="department" required>
+                                        <option value="MCA" selected>MCA</option>
+                                        <option value="BCA">BCA</option>
+                                        <option value="MBA">MBA</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="semester">Semester <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="semester" required>
+                                        <option value="1">Semester 1</option>
+                                        <option value="2">Semester 2</option>
+                                        <option value="3" selected>Semester 3</option>
+                                        <option value="4">Semester 4</option>
+                                        <option value="5">Semester 5</option>
+                                        <option value="6">Semester 6</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group"
+                                style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                                <button type="button" class="btn btn-outline"
+                                    onclick="window.history.back()">Cancel</button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    &#10003; Save Changes
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- Footer -->
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Update Student',
+            breadcrumb: 'Students > Update',
+            userRole: 'Admin'
+        });
+
+        // Fetch actual student data from backend
+        const urlParams = new URLSearchParams(window.location.search);
+        const stuId = urlParams.get('id');
+
+        async function loadStudentData() {
+            if (!stuId) return;
+            try {
+                const res = await fetch(`http://localhost:5000/api/users/${stuId}`);
+                if (!res.ok) throw new Error("Student not found");
+                const data = await res.json();
+                const student = data.data;
+
+                // Split name
+                const nameParts = student.name.split(' ');
+                const fName = nameParts[0] || '';
+                const lName = nameParts.slice(1).join(' ') || '';
+
+                document.getElementById('firstName').value = fName;
+                document.getElementById('lastName').value = lName;
+                document.getElementById('email').value = student.email || '';
+                document.getElementById('department').value = student.program || 'MCA';
+                document.getElementById('semester').value = student.semester || '1';
+                
+                // Status mapping
+                let statusVal = 'Active';
+                if (student.status === 'pending') statusVal = 'Pending';
+                // Add more if needed, default to what we have
+                document.getElementById('status').value = statusVal;
+
+                document.getElementById('displayStuName').textContent = student.name;
+                document.querySelector('.badge-primary').textContent = student.id;
+
+            } catch (err) {
+                console.error("Error fetching student:", err);
+                ERP_Toast.show('Error loading student data', 'error');
+            }
+        }
+
+        if (stuId) {
+            loadStudentData();
+        }
+
+        // Form submission processing
+        document.getElementById('updateStudentForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            if (!validateForm(this)) return;
+
+            const btn = document.getElementById('submitBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Saving...';
+
+            const fName = document.getElementById('firstName').value.trim();
+            const lName = document.getElementById('lastName').value.trim();
+            const fullName = `${fName} ${lName}`;
+            
+            const payload = {
+                name: fullName,
+                email: document.getElementById('email').value.trim(),
+                program: document.getElementById('department').value,
+                semester: document.getElementById('semester').value,
+                status: document.getElementById('status').value.toLowerCase()
+            };
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/users/${stuId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    document.getElementById('displayStuName').textContent = fullName;
+                    ERP_Toast.show('Student profile updated successfully!', 'success');
+                    
+                    // Redirect back to list
+                    setTimeout(() => window.location.href = 'view-students.html', 1500);
+                } else {
+                    const data = await res.json();
+                    ERP_Toast.show(data.message || 'Error updating student', 'error');
+                }
+            } catch (err) {
+                console.error("Error updating student:", err);
+                ERP_Toast.show('Network error. Backend not reachable.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,285 @@
+/* ============================================================
+   SIDEBAR CSS - College ERP Management System
+   File: assets/css/sidebar.css
+   Description: Left navigation sidebar styles
+   ============================================================ */
+
+/* ---- Sidebar Shell ---- */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg, var(--primary-color));
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: width 0.3s ease;
+    box-shadow: 4px 0 16px rgba(15, 36, 71, 0.3);
+}
+
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+/* ---- Sidebar Brand ---- */
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 18px;
+    height: var(--navbar-height);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.sidebar-brand .brand-icon {
+    width: 38px;
+    height: 38px;
+    background: var(--accent-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    color: var(--white);
+    font-weight: 700;
+}
+
+.sidebar-brand .brand-text {
+    overflow: hidden;
+    transition: opacity 0.2s, width 0.3s;
+}
+
+.sidebar-brand .brand-text h3 {
+    font-size: var(--font-size-sm);
+    color: var(--white);
+    font-weight: 700;
+    white-space: nowrap;
+    line-height: 1.3;
+}
+
+.sidebar-brand .brand-text p {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.55);
+    white-space: nowrap;
+}
+
+.sidebar.collapsed .brand-text {
+    opacity: 0;
+    width: 0;
+}
+
+/* ---- Sidebar Navigation ---- */
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* ---- Nav Section Label ---- */
+.nav-section-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 14px 20px 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.2s;
+}
+
+.sidebar.collapsed .nav-section-label {
+    opacity: 0;
+}
+
+/* ---- Nav Items ---- */
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 18px;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    transition: var(--transition);
+    border-left: 3px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: var(--font-size-sm);
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--white);
+    border-left-color: rgba(255, 255, 255, 0.4);
+}
+
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+    border-left-color: var(--accent-light);
+}
+
+.nav-link.active .nav-icon {
+    color: var(--accent-light);
+}
+
+.nav-icon {
+    font-size: 1.1rem;
+    width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.nav-text {
+    transition: opacity 0.2s;
+    font-weight: 500;
+}
+
+.sidebar.collapsed .nav-text {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ---- Submenu / Dropdown Groups ---- */
+.nav-group>.nav-link {
+    position: relative;
+}
+
+.nav-group>.nav-link .nav-arrow {
+    margin-left: auto;
+    font-size: 0.65rem;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+}
+
+.nav-group.open>.nav-link .nav-arrow {
+    transform: rotate(180deg);
+}
+
+.sidebar.collapsed .nav-arrow {
+    display: none;
+}
+
+.nav-submenu {
+    display: none;
+    background: rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.nav-group.open .nav-submenu {
+    display: block;
+}
+
+.nav-submenu .nav-link {
+    padding-left: 54px;
+    font-size: var(--font-size-xs);
+    border-left: none;
+}
+
+.nav-submenu .nav-link::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.nav-submenu .nav-link.active::before {
+    background: var(--accent-light);
+}
+
+/* ---- Sidebar Footer ---- */
+.sidebar-footer {
+    padding: 14px 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.sidebar-user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+}
+
+.sidebar-user-info {
+    overflow: hidden;
+    transition: opacity 0.2s;
+}
+
+.sidebar-user-info h4 {
+    font-size: var(--font-size-xs);
+    color: var(--white);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sidebar-user-info span {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+}
+
+.sidebar.collapsed .sidebar-user-info {
+    opacity: 0;
+    width: 0;
+}
+
+/* ---- Tooltip on Collapsed State ---- */
+.sidebar.collapsed .nav-link:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    left: calc(var(--sidebar-collapsed-width) + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--text-dark);
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 2000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}

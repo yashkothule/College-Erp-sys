@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add Course — College ERP Management System">
+    <title>Add Course &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128218; Add New Course</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Define a new course/subject for an academic program.
+                        </p>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="window.history.back()">
+                        &larr; Back
+                    </button>
+                </div>
+
+                <div class="card" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-header">
+                        <h3>Course Details Form</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <form id="addCourseForm" novalidate>
+
+                            <h4 class="form-section-title">Basic Information</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="courseCode">Course Code <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="courseCode" placeholder="e.g. CS401"
+                                        required>
+                                    <div class="form-error">Course code is required.</div>
+                                </div>
+
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label class="form-label" for="courseName">Course Title <span
+                                            class="required">*</span></label>
+                                    <input type="text" class="form-control" id="courseName"
+                                        placeholder="e.g. Data Structures and Algorithms" required>
+                                    <div class="form-error">Course title is required.</div>
+                                </div>
+
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label class="form-label" for="description">Course Description</label>
+                                    <textarea class="form-control" id="description" rows="3"
+                                        placeholder="Brief description of the course contents and objectives"></textarea>
+                                </div>
+                            </div>
+
+                            <h4 class="form-section-title">Academic Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="department">Department <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="department" required>
+                                        <option value="" disabled selected>Select Department</option>
+                                        <option value="MCA">MCA</option>
+                                        <option value="BCA">BCA</option>
+                                        <option value="MBA">MBA</option>
+                                        <option value="BScIT">B.Sc. IT</option>
+                                    </select>
+                                    <div class="form-error">Department is required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="semester">Target Semester <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="semester" required>
+                                        <option value="" disabled selected>Select Semester</option>
+                                        <option value="1">Semester 1</option>
+                                        <option value="2">Semester 2</option>
+                                        <option value="3">Semester 3</option>
+                                        <option value="4">Semester 4</option>
+                                        <option value="5">Semester 5</option>
+                                        <option value="6">Semester 6</option>
+                                        <option value="All">All Semesters (Elective)</option>
+                                    </select>
+                                    <div class="form-error">Semester is required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="credits">Credits <span
+                                            class="required">*</span></label>
+                                    <input type="number" class="form-control" id="credits" min="1" max="10"
+                                        placeholder="e.g. 4" required>
+                                    <div class="form-error">Valid credits required.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="courseType">Course Type <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="courseType" required>
+                                        <option value="Core" selected>Core Subject</option>
+                                        <option value="Elective">Elective</option>
+                                        <option value="Lab">Practical / Lab</option>
+                                        <option value="Project">Project Work</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group"
+                                style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                                <button type="reset" class="btn btn-outline">Reset</button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    &#10003; Save Course
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Add Course',
+            breadcrumb: 'Courses > Add',
+            userRole: 'Admin'
+        });
+
+        document.getElementById('addCourseForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            if (!validateForm(this)) return;
+
+            const btn = document.getElementById('submitBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Saving...';
+
+            const code = document.getElementById('courseCode').value.trim().toUpperCase();
+            const title = document.getElementById('courseName').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const dept = document.getElementById('department').value;
+            const sem = parseInt(document.getElementById('semester').value, 10);
+            const credits = parseInt(document.getElementById('credits').value, 10);
+            const type = document.getElementById('courseType').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/courses', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        code: code,
+                        title: title,
+                        description: description,
+                        department: dept,
+                        semester: isNaN(sem) ? null : sem,
+                        credits: credits,
+                        type: type
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    ERP_Toast.show('Course "' + code + '" created successfully!', 'success');
+                    this.reset();
+                } else {
+                    ERP_Toast.show(data.message || 'Error creating course', 'error');
+                }
+            } catch (err) {
+                console.error("Error creating course:", err);
+                ERP_Toast.show('Network error. Backend not reachable.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        });
+    </script>
+
+</body>
+
+</html>

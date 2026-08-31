@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Faculty List — College ERP Management System">
+    <title>Faculty List &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128084; Faculty Directory</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            List of all academic staff members.
+                        </p>
+                    </div>
+                    <a href="add-faculty.html" class="btn btn-primary">
+                        &#43; Add Faculty
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="display:flex; gap:16px; flex-wrap:wrap;">
+
+                        <!-- Search Control -->
+                        <div class="filter-bar" style="margin-bottom:0; flex:1;">
+                            <div class="search-box">
+                                <span class="search-icon">&#128269;</span>
+                                <input type="text" id="facultySearch" placeholder="Search by name, ID or department...">
+                            </div>
+                        </div>
+
+                        <select class="form-control" id="deptFilter"
+                            style="width: auto; padding: 8px 12px; font-size: var(--font-size-sm);">
+                            <option value="All">All Departments</option>
+                            <option value="Computer Applications">Computer Applications</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Management">Management</option>
+                        </select>
+
+                    </div>
+
+                    <div class="card-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="erp-table" id="facultyTable">
+                                <thead>
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <th>Faculty Name</th>
+                                        <th>Designation</th>
+                                        <th>Department</th>
+                                        <th>Qualification</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="facultyTableBody">
+                                    <tr>
+                                        <td colspan="7" style="text-align:center; padding: 2rem;">Loading faculty...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Faculty Directory',
+            breadcrumb: 'Faculty > List',
+            userRole: 'Admin'
+        });
+
+        // Initialize Table Search (ID, Name, Dept)
+        setTimeout(() => {
+            if (typeof initTableSearch === 'function') {
+                initTableSearch('facultySearch', 'facultyTable', [0, 1, 3]);
+            }
+        }, 100);
+
+        // Department Filter
+        document.getElementById('deptFilter').addEventListener('change', function () {
+            const filterText = this.value === 'All' ? '' : this.value.toLowerCase();
+            const rows = document.querySelectorAll('#facultyTable tbody tr');
+
+            rows.forEach(row => {
+                const deptText = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                if (filterText === '' || deptText.includes(filterText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Load faculty from backend
+        async function loadFaculty() {
+            try {
+                const res = await fetch('http://localhost:5000/api/users?role=faculty');
+                const data = await res.json();
+                const faculty = data.data || [];
+
+                const tbody = document.getElementById('facultyTableBody');
+                tbody.innerHTML = '';
+
+                if (faculty.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center">No faculty found.</td></tr>`;
+                } else {
+                    faculty.forEach(f => {
+                        const badgeColor = f.status === 'active' ? 'success' : (f.status === 'pending' ? 'warning' : 'danger');
+                        const tr = document.createElement('tr');
+                        // In a real system, designation/qualification/department might be in a separate table, 
+                        // but we will use program for department since the db schema has program instead of department.
+                        tr.innerHTML = `
+                            <td>${f.id}</td>
+                            <td>${f.name}</td>
+                            <td>Faculty</td>
+                            <td>${f.program || 'N/A'}</td>
+                            <td>N/A</td>
+                            <td><span class="badge badge-${badgeColor}">${(f.status || 'active').charAt(0).toUpperCase() + (f.status || 'active').slice(1)}</span></td>
+                            <td>
+                                <div style="display:flex; gap:6px;">
+                                    <button class="btn btn-sm btn-outline text-danger" title="Delete"
+                                        onclick="deleteFaculty('${f.id}')">&#128465;</button>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (err) {
+                console.error("Error loading faculty:", err);
+                const tbody = document.getElementById('facultyTableBody');
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:red;">Failed to retrieve data from backend.</td></tr>`;
+            }
+        }
+
+        // Initialize on load
+        loadFaculty();
+
+        async function deleteFaculty(id) {
+            if (confirm('Are you sure you want to remove this faculty record?')) {
+                try {
+                    const res = await fetch(`http://localhost:5000/api/users/${id}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        ERP_Toast.show('Faculty record removed.', 'success');
+                        loadFaculty(); // re-render table
+                    } else {
+                        const data = await res.json();
+                        ERP_Toast.show(data.message || 'Error deleting faculty', 'error');
+                    }
+                } catch (err) {
+                    console.error("Error deleting faculty:", err);
+                    ERP_Toast.show('Network error. Backend not reachable.', 'error');
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

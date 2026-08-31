@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Faculty Dashboard — College ERP Management System">
+    <title>Faculty Dashboard &mdash; College ERP</title>
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+    <link rel="stylesheet" href="../../assets/css/dashboard.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128084; Faculty Dashboard</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm);margin-top:3px">
+                            Welcome back, <span data-current-date></span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Welcome Banner -->
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h2>Hello, <span id="welcomeName">Faculty</span>! &#128075;</h2>
+                        <p>Manage your courses, students, and marks from here.</p>
+                        <div class="welcome-meta">
+                            <div class="welcome-meta-item">&#128218; Courses Assigned: <span id="bannerCourses">0</span>
+                            </div>
+                            <div class="welcome-meta-item">&#128107; Students: <span id="bannerStudents">0</span></div>
+                            <div class="welcome-meta-item">&#128337; Semester: Even 2025&ndash;26</div>
+                        </div>
+                    </div>
+                    <div class="welcome-image" aria-hidden="true">&#128084;</div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">&#128218;</div>
+                        <div class="stat-info">
+                            <h3 id="statCourses">0</h3>
+                            <p>Assigned Courses</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">&#128107;</div>
+                        <div class="stat-info">
+                            <h3 id="statStudents">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon gold">&#128203;</div>
+                        <div class="stat-info">
+                            <h3>3</h3>
+                            <p>Pending Results</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">&#128337;</div>
+                        <div class="stat-info">
+                            <h3>92%</h3>
+                            <p>Attendance Rate</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <a href="../exam/marks-entry.html" class="quick-action-btn">
+                        <i>&#128203;</i> Enter Marks
+                    </a>
+                    <a href="../exam/result-display.html" class="quick-action-btn">
+                        <i>&#128202;</i> View Results
+                    </a>
+                    <a href="../student/view-students.html" class="quick-action-btn">
+                        <i>&#128107;</i> My Students
+                    </a>
+                    <a href="../course/course-list.html" class="quick-action-btn">
+                        <i>&#128218;</i> My Courses
+                    </a>
+                </div>
+
+                <!-- Assigned Courses Table -->
+                <div class="card mb-24">
+                    <div class="card-header">
+                        <h3>&#128218; Assigned Courses</h3>
+                        <span class="badge badge-primary">Even Sem 2025&ndash;26</span>
+                    </div>
+                    <div class="card-body" style="padding:0">
+                        <div class="table-responsive">
+                            <table class="erp-table" aria-label="Assigned courses">
+                                <thead>
+                                    <tr>
+                                        <th>Course Code</th>
+                                        <th>Course Name</th>
+                                        <th>Department</th>
+                                        <th>Semester</th>
+                                        <th>Students</th>
+                                        <th>Credits</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="assignedCoursesBody">
+                                    <tr>
+                                        <td colspan="7" style="text-align:center; padding: 2rem;">Loading courses...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({ root: '../../', pageTitle: 'Faculty Dashboard', breadcrumb: 'Dashboard', userRole: 'Faculty' })
+            .then(() => {
+                const user = JSON.parse(sessionStorage.getItem('erp_user') || '{}');
+                const el = document.getElementById('welcomeName');
+                if (el && user.name) {
+                    el.textContent = user.name.split(' ')[0];
+                    loadFacultyData(user.name);
+                }
+            });
+
+        async function loadFacultyData(facultyName) {
+            try {
+                // Fetch dynamic courses
+                const res = await API.getAllCourses();
+
+                // Filter down to courses where the faculty name matches exactly or closely
+                // In demo, we just match a substring since prof names are somewhat arbitrary
+                const myCourses = res.data.filter(c => c.faculty && c.faculty.includes(facultyName.split(' ')[1] || facultyName));
+
+                // Fetch total generic students from localStorage to calculate total subset
+                const liveUsers = JSON.parse(localStorage.getItem('erp_live_users') || '[]');
+                const allStudents = liveUsers.filter(u => u.role === 'student');
+
+                // Compute dummy totals for assigned students (just an estimate representation)
+                // If it was a real DB, we'd query SELECT COUNT(*) JOIN enrollments WHERE course_id IN (myCourses)
+                let totalMyStudents = 0;
+
+                const tbody = document.getElementById('assignedCoursesBody');
+                tbody.innerHTML = '';
+
+                if (myCourses.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center">No courses assigned currently.</td></tr>`;
+                } else {
+                    myCourses.forEach((c, idx) => {
+                        // Mocking active students differently per course based on course credits
+                        const enrolled = allStudents.length > 0 ? Math.floor(allStudents.length * (Math.random() * 0.5 + 0.3)) : (idx + 1) * 15;
+                        totalMyStudents += enrolled;
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${c.code}</td>
+                            <td>${c.name}</td>
+                            <td>${c.department}</td>
+                            <td>Sem ${c.credits + 1}</td>
+                            <td>${enrolled}</td>
+                            <td>${c.credits}</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                         `;
+                        tbody.appendChild(tr);
+                    });
+                }
+
+                // Update Widgets
+                document.getElementById('bannerCourses').textContent = myCourses.length;
+                document.getElementById('statCourses').textContent = myCourses.length;
+
+                document.getElementById('bannerStudents').textContent = totalMyStudents;
+                document.getElementById('statStudents').textContent = totalMyStudents;
+
+            } catch (err) {
+                console.error("Failed to load faculty dashboard data", err);
+            }
+        }
+
+        (function guard() {
+            if (!sessionStorage.getItem('erp_user')) window.location.href = '../../index.html';
+        })();
+    </script>
+
+</body>
+
+</html>

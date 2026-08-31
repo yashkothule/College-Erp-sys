@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Registration Approvals — College ERP Management System">
+    <title>Registration Approvals &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header" style="justify-content: space-between;">
+                    <div>
+                        <h1>&#9989; Registration Approvals</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Review and authorize new system access requests.
+                        </p>
+                    </div>
+                    <button class="btn btn-primary" onclick="loadPendingRequests()">
+                        &#8635; Refresh Queue
+                    </button>
+                </div>
+
+                <!-- Registration List Display -->
+                <div class="card">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <h3>Pending Signups</h3>
+                        <span class="badge badge-warning" id="pendingCountBadge">0 Pending</span>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="erp-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date Requested</th>
+                                        <th>Full Name</th>
+                                        <th>Requested Role</th>
+                                        <th>Target ID</th>
+                                        <th>Email Address</th>
+                                        <th style="text-align: right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="approvalTableBody">
+                                    <!-- Populated dynamically via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Registration Approvals',
+            breadcrumb: 'Accounts > Registration Approvals',
+            userRole: 'Admin'
+        }).then(() => {
+            loadPendingRequests();
+        });
+
+        // Load Pending users from backend
+        async function loadPendingRequests() {
+            try {
+                const res = await fetch('http://localhost:5000/api/users?status=pending');
+                const data = await res.json();
+                const pendingUsers = data.data || [];
+                
+                const tbody = document.getElementById('approvalTableBody');
+                tbody.innerHTML = ''; // Selectively clear table
+
+                // Update Header Counts
+                document.getElementById('pendingCountBadge').textContent = `${pendingUsers.length} Pending`;
+
+                if (pendingUsers.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 32px; color: var(--text-muted);">&#127881; All caught up! No pending registration requests.</td></tr>`;
+                    return;
+                }
+
+                pendingUsers.forEach((user) => {
+                    const reqDate = user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A';
+                    const roleBadgeClass = user.role === 'admin' ? 'badge-primary' : (user.role === 'faculty' ? 'badge-info' : 'badge-success');
+                    const roleDisplay = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="text-muted" style="font-size: 13px;">${reqDate}</td>
+                        <td style="font-weight: 500;">${user.name}</td>
+                        <td><span class="badge ${roleBadgeClass}">${roleDisplay}</span></td>
+                        <td><code style="background: var(--bg-light); padding: 2px 6px; border-radius: 4px;">${user.id}</code></td>
+                        <td class="text-muted"><a href="mailto:${user.email}" style="color: inherit; text-decoration: none;">${user.email}</a></td>
+                        <td style="text-align: right;">
+                            <button class="btn btn-sm btn-success" onclick="approveUser('${user.id}', '${user.name}')" title="Approve Request">
+                                &#10004;
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="rejectUser('${user.id}', '${user.name}')" title="Reject Request" style="margin-left: 4px;">
+                                &#10006;
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Error loading pending requests:", err);
+                const tbody = document.getElementById('approvalTableBody');
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 32px; color: red;">Network error. Cannot reach backend API.</td></tr>`;
+            }
+        }
+
+        // --- Approve User Flow ---
+        async function approveUser(userId, userName) {
+            try {
+                const res = await fetch(`http://localhost:5000/api/users/${userId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'active' })
+                });
+                if (res.ok) {
+                    ERP_Toast.show(`Approved registration for ${userName} (${userId}).`, 'success');
+                    loadPendingRequests();
+                } else {
+                    const data = await res.json();
+                    ERP_Toast.show(data.message || 'Error approving user', 'error');
+                }
+            } catch (err) {
+                console.error("Error approving user:", err);
+                ERP_Toast.show('Network error', 'error');
+            }
+        }
+
+        // --- Reject User Flow ---
+        async function rejectUser(userId, userName) {
+            if (confirm("Are you sure you want to REJECT and delete this registration request?")) {
+                try {
+                    const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+                        method: 'DELETE'
+                    });
+                    if (res.ok) {
+                        ERP_Toast.show(`Rejected request for ${userName}.`, 'error');
+                        loadPendingRequests();
+                    } else {
+                        const data = await res.json();
+                        ERP_Toast.show(data.message || 'Error deleting user', 'error');
+                    }
+                } catch (err) {
+                    console.error("Error rejecting user:", err);
+                    ERP_Toast.show('Network error', 'error');
+                }
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

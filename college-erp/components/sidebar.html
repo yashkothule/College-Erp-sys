@@ -1,0 +1,193 @@
+<!--
+  SIDEBAR COMPONENT - College ERP Management System
+  File: components/sidebar.html
+  Description: Reusable left navigation sidebar with all module links.
+               Include this via JS fetch() or JSP include tag.
+  Usage in HTML: <div id="sidebar-container"></div>
+  Note: In JSP Phase, replace with: <%@ include file="sidebar.jsp" %>
+-->
+<aside class="sidebar" id="mainSidebar">
+
+    <!-- Brand Logo -->
+    <div class="sidebar-brand">
+        <div class="brand-icon">CE</div>
+        <div class="brand-text">
+            <h3>College ERP</h3>
+            <p>Management System</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav" id="sidebarNav">
+
+        <!-- MAIN MENU -->
+        <div class="nav-section-label">Main</div>
+
+        <div class="nav-item">
+            <a href="../../index.html" class="nav-link" data-title="Dashboard">
+                <span class="nav-icon">&#9732;</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+        </div>
+
+        <div class="nav-item" id="adminApprovalsLink" style="display: none;">
+            <a href="../admin/approve-registrations.html" class="nav-link" data-title="Approvals">
+                <span class="nav-icon">&#9989;</span>
+                <span class="nav-text">Approvals</span>
+            </a>
+        </div>
+
+        <!-- STUDENT MODULE -->
+        <div class="nav-section-label">Academics</div>
+
+        <div class="nav-item nav-group" id="studentGroup">
+            <a href="#" class="nav-link" data-title="Students">
+                <span class="nav-icon">&#128107;</span>
+                <span class="nav-text">Students</span>
+                <span class="nav-arrow">&#9660;</span>
+            </a>
+            <div class="nav-submenu">
+                <div class="nav-item">
+                    <a href="../student/add-student.html" class="nav-link" data-title="Add Student">
+                        Add Student
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../student/view-students.html" class="nav-link" data-title="View Students">
+                        View Students
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FACULTY MODULE -->
+        <div class="nav-item nav-group" id="facultyGroup">
+            <a href="#" class="nav-link" data-title="Faculty">
+                <span class="nav-icon">&#128084;</span>
+                <span class="nav-text">Faculty</span>
+                <span class="nav-arrow">&#9660;</span>
+            </a>
+            <div class="nav-submenu">
+                <div class="nav-item">
+                    <a href="../faculty/add-faculty.html" class="nav-link" data-title="Add Faculty">
+                        Add Faculty
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../faculty/faculty-list.html" class="nav-link" data-title="Faculty List">
+                        Faculty List
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- COURSE MODULE -->
+        <div class="nav-item nav-group" id="courseGroup">
+            <a href="#" class="nav-link" data-title="Courses">
+                <span class="nav-icon">&#128218;</span>
+                <span class="nav-text">Courses</span>
+                <span class="nav-arrow">&#9660;</span>
+            </a>
+            <div class="nav-submenu">
+                <div class="nav-item">
+                    <a href="../course/add-course.html" class="nav-link" data-title="Add Course">
+                        Add Course
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../course/assign-faculty.html" class="nav-link" data-title="Assign Faculty">
+                        Assign Faculty
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../course/course-list.html" class="nav-link" data-title="Course List">
+                        Course List
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXAMINATION MODULE -->
+        <div class="nav-section-label">Examination</div>
+
+        <div class="nav-item nav-group" id="examGroup">
+            <a href="#" class="nav-link" data-title="Examination">
+                <span class="nav-icon">&#128203;</span>
+                <span class="nav-text">Examination</span>
+                <span class="nav-arrow">&#9660;</span>
+            </a>
+            <div class="nav-submenu">
+                <div class="nav-item">
+                    <a href="../exam/marks-entry.html" class="nav-link" data-title="Marks Entry">
+                        Marks Entry
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../exam/result-display.html" class="nav-link" data-title="Results">
+                        Results
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEE MODULE -->
+        <div class="nav-section-label">Finance</div>
+
+        <div class="nav-item nav-group" id="feesGroup">
+            <a href="#" class="nav-link" data-title="Fees">
+                <span class="nav-icon">&#128176;</span>
+                <span class="nav-text">Fees</span>
+                <span class="nav-arrow">&#9660;</span>
+            </a>
+            <div class="nav-submenu">
+                <div class="nav-item">
+                    <a href="../fees/payment-entry.html" class="nav-link" data-title="Fee Payment">
+                        Fee Payment
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../fees/receipt.html" class="nav-link" data-title="Receipt">
+                        Receipt
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../fees/pending-fees.html" class="nav-link" data-title="Pending Fees">
+                        Pending Fees
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLACEMENT MODULE -->
+        <div class="nav-section-label">Placement</div>
+
+        <div class="nav-item nav-group" id="placementGroup">
+            <a href="#" class="nav-link" data-title="Placement">
+                <span class="nav-icon">&#127959;</span>
+                <span class="nav-text">Placement</span>
+                <span class="nav-arrow">&#9660;</span>
+            </a>
+            <div class="nav-submenu">
+                <div class="nav-item">
+                    <a href="../placement/company-registration.html" class="nav-link" data-title="Company Registration">
+                        Company Registration
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../placement/eligibility-list.html" class="nav-link" data-title="Eligibility List">
+                        Eligibility List
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="../placement/placement-status.html" class="nav-link" data-title="Placement Status">
+                        Placement Status
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </nav><!-- end sidebar-nav -->
+
+
+
+</aside><!-- end sidebar -->

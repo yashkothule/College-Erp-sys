@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View Results — College ERP Management System">
+    <title>View Results &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header" style="justify-content: space-between;">
+                    <div>
+                        <h1>&#128202; Academic Results</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            View and print semester grade sheets.
+                        </p>
+                    </div>
+                    <button class="btn btn-outline" onclick="window.print()">
+                        &#128424; Print Grade Card
+                    </button>
+                </div>
+
+                <!-- Pre-Selection Form (Admin/Faculty View) Or Student Detail -->
+                <div class="card mb-24 print-hide">
+                    <div class="card-body">
+                        <form id="searchResultForm" class="form-grid" style="align-items: end;">
+                            <div class="form-group" style="flex:1">
+                                <label class="form-label" for="searchRollNo">Student Roll No.</label>
+                                <input type="text" class="form-control" id="searchRollNo" value="STU2024001"
+                                    placeholder="Enter Roll No.">
+                            </div>
+                            <div class="form-group" style="flex:1">
+                                <label class="form-label">Semester</label>
+                                <select class="form-control" id="searchSem">
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3" selected>Semester 3</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="padding-bottom: 2px;">
+                                <button type="button" class="btn btn-primary" onclick="showResult()">Get Result</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Result Display Sheet -->
+                <div class="card p-24" id="resultSheet" style="display: none;">
+
+                    <!-- University Branding for Print -->
+                    <div
+                        style="text-align: center; border-bottom: 2px solid var(--primary-color); padding-bottom: 16px; margin-bottom: 24px;">
+                        <h2 style="color: var(--primary-color); margin-bottom: 8px;">COLLEGE OF ADVANCED COMPUTING</h2>
+                        <p class="text-muted" style="margin-bottom: 4px;">An Autonomous Institution Affiliated to State
+                            University</p>
+                        <h3 style="margin-top: 12px; text-transform: uppercase;">Semester Grade Sheet</h3>
+                    </div>
+
+                    <!-- Student Details Grid -->
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; font-size: 15px;">
+                        <div>
+                            <p style="margin-bottom: 8px;"><strong>Name of Student:</strong> <span id="resName">Priya
+                                    Sharma</span></p>
+                            <p style="margin-bottom: 8px;"><strong>Roll Number:</strong> <span
+                                    id="resRoll">STU2024001</span></p>
+                        </div>
+                        <div>
+                            <p style="margin-bottom: 8px;"><strong>Program:</strong> Master of Computer Applications
+                                (MCA)</p>
+                            <p style="margin-bottom: 8px;"><strong>Semester / Year:</strong> 3 / 2025-26</p>
+                        </div>
+                    </div>
+
+                    <!-- Marks Table -->
+                    <table class="erp-table" style="margin-bottom: 24px;">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%">Course Code</th>
+                                <th style="width: 40%">Course Title</th>
+                                <th style="width: 10%; text-align: center;">Credits</th>
+                                <th style="width: 10%; text-align: center;">Grade</th>
+                                <th style="width: 10%; text-align: center;">Points</th>
+                                <th style="width: 15%; text-align: center;">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>MCA301</td>
+                                <td>Advanced Java Programming</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center; font-weight: bold; color: var(--success-color)">A+</td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;"><span class="badge badge-success">PASS</span></td>
+                            </tr>
+                            <tr>
+                                <td>MCA302</td>
+                                <td>Web Technologies</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center; font-weight: bold; color: var(--success-color)">A</td>
+                                <td style="text-align: center;">9</td>
+                                <td style="text-align: center;"><span class="badge badge-success">PASS</span></td>
+                            </tr>
+                            <tr>
+                                <td>CS301</td>
+                                <td>Data Structures & Algorithms</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center; font-weight: bold; color: var(--primary-color)">B+</td>
+                                <td style="text-align: center;">8</td>
+                                <td style="text-align: center;"><span class="badge badge-success">PASS</span></td>
+                            </tr>
+                            <tr>
+                                <td>CS302</td>
+                                <td>Computer Networks</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center; font-weight: bold; color: var(--primary-color)">B</td>
+                                <td style="text-align: center;">7</td>
+                                <td style="text-align: center;"><span class="badge badge-success">PASS</span></td>
+                            </tr>
+                            <tr>
+                                <td>MCA303</td>
+                                <td>Research Methodology</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center; font-weight: bold; color: var(--danger-color)">F</td>
+                                <td style="text-align: center;">0</td>
+                                <td style="text-align: center;"><span class="badge badge-danger">FAIL</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Summary Stats -->
+                    <div style="display: flex; justify-content: flex-end; width: 100%;">
+                        <div
+                            style="background: var(--bg-color); padding: 16px 24px; border-radius: var(--border-radius); border: 1px solid var(--border-color); min-width: 300px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span class="text-muted">Total Credits Registered:</span>
+                                <strong>17</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span class="text-muted">Total Credits Earned:</span>
+                                <strong>15</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                <span class="text-muted">Semester GPA (SGPA):</span>
+                                <strong>8.12</strong>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; border-top: 1px dashed var(--border-color); padding-top: 12px; margin-top: 12px;">
+                                <span style="font-weight: 600;">Overall CGPA:</span>
+                                <strong style="color: var(--primary-color); font-size: 1.1em;">8.40</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Signatures -->
+                    <div style="display: flex; justify-content: space-between; margin-top: 64px; padding-top: 16px;">
+                        <div style="text-align: center;">
+                            <div style="border-top: 1px solid #000; padding-top: 8px; width: 200px;">Prepared By</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="border-top: 1px solid #000; padding-top: 8px; width: 200px;">Controller of
+                                Examinations</div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+
+            <div id="footer-container" class="print-hide"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Result Display',
+            breadcrumb: 'Examination > Results',
+            userRole: 'Admin' // In real app, Student role would bypass search form
+        });
+
+        function showResult() {
+            const roll = document.getElementById('searchRollNo').value;
+            if (!roll) {
+                ERP_Toast.show('Please enter a Roll Number.', 'error');
+                return;
+            }
+
+            document.getElementById('resultSheet').style.display = 'block';
+            ERP_Toast.show('Result fetched successfully.', 'success');
+        }
+
+        // Auto-show for demo if URL has param
+        if (window.location.search.includes('show=1')) {
+            setTimeout(showResult, 500);
+        }
+    </script>
+
+    <style>
+        /* Print specific styles */
+        @media print {
+
+            .print-hide,
+            .sidebar,
+            .erp-header {
+                display: none !important;
+            }
+
+            .erp-main {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+
+            .erp-content {
+                padding: 0 !important;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+        }
+    </style>
+
+</body>
+
+</html>

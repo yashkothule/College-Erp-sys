@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard — College ERP Management System">
+    <title>Admin Dashboard &mdash; College ERP</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+    <link rel="stylesheet" href="../../assets/css/dashboard.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <!-- ============================================================
+     ERP WRAPPER — Sidebar + Main Content
+     ============================================================ -->
+    <div class="erp-wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main Area -->
+        <div class="erp-main" id="erpMain">
+
+            <!-- Navbar -->
+            <div id="navbar-container"></div>
+
+            <!-- ============================================================
+             PAGE CONTENT
+             ============================================================ -->
+            <main class="erp-content" id="mainContent">
+
+                <!-- ---- Page Header ---- -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#9732; Admin Dashboard</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Overview of all college activities &mdash; <span data-current-date></span>
+                        </p>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="window.print()">
+                        &#128438; Export Report
+                    </button>
+                </div>
+
+
+                <!-- ---- Welcome Banner ---- -->
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h2>Good day, <span id="welcomeName">Admin</span>! &#128075;</h2>
+                        <p>Here's what's happening at your college today.</p>
+                        <div class="welcome-meta">
+                            <div class="welcome-meta-item">&#128197; Academic Year: 2025&ndash;26</div>
+                            <div class="welcome-meta-item">&#128337; Semester: Even (Jan&ndash;May 2025)</div>
+                            <div class="welcome-meta-item">&#127970; Main Campus</div>
+                        </div>
+                    </div>
+                    <div class="welcome-image" aria-hidden="true">&#127979;</div>
+                </div>
+
+
+                <!-- ---- KPI / Stats Cards ---- -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue" aria-hidden="true">&#128107;</div>
+                        <div class="stat-info">
+                            <h3 id="dashTotalStudents">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon gold" aria-hidden="true">&#128084;</div>
+                        <div class="stat-info">
+                            <h3 id="dashTotalFaculty">0</h3>
+                            <p>Total Faculty</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green" aria-hidden="true">&#128218;</div>
+                        <div class="stat-info">
+                            <h3 id="dashActiveCourses">0</h3>
+                            <p>Active Courses</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red" aria-hidden="true">&#128176;</div>
+                        <div class="stat-info">
+                            <h3>&#8377;0</h3>
+                            <p>Pending Fees</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple" aria-hidden="true">&#127959;</div>
+                        <div class="stat-info">
+                            <h3>0</h3>
+                            <p>Placement Drives</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- ---- Quick Action Buttons ---- -->
+                <div class="quick-actions">
+                    <a href="../student/add-student.html" class="quick-action-btn">
+                        <i>&#43;</i> Add Student
+                    </a>
+                    <a href="../faculty/add-faculty.html" class="quick-action-btn">
+                        <i>&#43;</i> Add Faculty
+                    </a>
+                    <a href="../course/add-course.html" class="quick-action-btn">
+                        <i>&#128218;</i> New Course
+                    </a>
+                    <a href="../exam/marks-entry.html" class="quick-action-btn">
+                        <i>&#128203;</i> Marks Entry
+                    </a>
+                    <a href="../fees/payment-entry.html" class="quick-action-btn">
+                        <i>&#128176;</i> Fee Entry
+                    </a>
+                    <a href="../placement/company-registration.html" class="quick-action-btn">
+                        <i>&#127959;</i> Register Company
+                    </a>
+                </div>
+
+
+                <!-- ---- Dashboard Grid: Recent Activity + Upcoming Events ---- -->
+                <div class="dashboard-grid">
+
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>&#128337; Recent Activity</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-list" id="recentActivityList">
+                                <div style="padding: 20px; text-align: center; color: var(--text-muted);">Loading live activity logs...</div>
+                            </div><!-- end activity-list -->
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Events -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>&#128197; Upcoming Events</h3>
+                            <a href="#" style="font-size:var(--font-size-xs)">Calendar</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="events-list">
+
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">03</span>
+                                        <span class="month">Mar</span>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>TCS Campus Drive</h4>
+                                        <p>Placement Cell &mdash; 42 Eligible</p>
+                                    </div>
+                                </div>
+
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">05</span>
+                                        <span class="month">Mar</span>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>Fee Payment Deadline</h4>
+                                        <p>Even Semester 2025&ndash;26</p>
+                                    </div>
+                                </div>
+
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">10</span>
+                                        <span class="month">Mar</span>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>Mid-Semester Exams Begin</h4>
+                                        <p>All UG &amp; PG Programs</p>
+                                    </div>
+                                </div>
+
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">15</span>
+                                        <span class="month">Mar</span>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>Infosys Drive Results</h4>
+                                        <p>HR Round &mdash; Selected List</p>
+                                    </div>
+                                </div>
+
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">22</span>
+                                        <span class="month">Mar</span>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>Annual Sports Day</h4>
+                                        <p>Main Ground &mdash; All Departments</p>
+                                    </div>
+                                </div>
+
+                            </div><!-- end events-list -->
+                        </div>
+                    </div>
+
+                </div><!-- end dashboard-grid -->
+
+
+                <!-- ---- Department Enrollment + Pending Tasks ---- -->
+                <div class="dashboard-grid-3">
+
+                    <!-- Department Enrollment Progress -->
+                    <div class="card" style="grid-column: span 2;">
+                        <div class="card-header">
+                            <h3>&#128202; Department Enrollment</h3>
+                            <span class="badge badge-info">AY 2025&ndash;26</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="dept-progress-list" id="deptEnrollmentList">
+                                <div style="padding: 20px; text-align: center; color: var(--text-muted);">Calculating enrollments...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Tasks -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>&#9989; Pending Tasks</h3>
+                            <span class="badge badge-danger">5 Due</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="task-list" id="pendingTasksList">
+                                <div style="padding: 20px; text-align: center; color: var(--text-muted);">Loading tasks...</div>
+                            </div><!-- end task-list -->
+                        </div>
+                    </div>
+
+                </div><!-- end dashboard-grid-3 -->
+
+
+                <!-- ---- Recent Students Table ---- -->
+                <div class="card mb-24">
+                    <div class="card-header">
+                        <h3>&#128107; Recently Added Students</h3>
+                        <a href="../student/view-students.html" class="btn btn-outline btn-sm">View All</a>
+                    </div>
+                    <div class="card-body" style="padding: 0">
+                        <div class="table-responsive">
+                            <table class="erp-table" id="recentStudentsTable" aria-label="Recently added students">
+                                <thead>
+                                    <tr>
+                                        <th>Roll No.</th>
+                                        <th>Student Name</th>
+                                        <th>Department</th>
+                                        <th>Semester</th>
+                                        <th>Admission Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentStudentsBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align:center; padding: 2rem;">Loading recent
+                                            students...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main><!-- end erp-content -->
+
+            <!-- Footer -->
+            <div id="footer-container"></div>
+
+        </div><!-- end erp-main -->
+
+    </div><!-- end erp-wrapper -->
+
+
+    <!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+
+    <script>
+        /* Initialize all ERP components (sidebar, navbar, footer) */
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Admin Dashboard',
+            breadcrumb: 'Dashboard',
+            userRole: 'Admin'
+        }).then(() => {
+            /* Set welcome message after navbar user name is loaded */
+            const user = JSON.parse(sessionStorage.getItem('erp_user') || '{}');
+            const welcomeName = document.getElementById('welcomeName');
+            if (welcomeName && user.name) {
+                welcomeName.textContent = user.name.split(' ')[0]; // First name only
+            }
+
+            // Load dynamic data from local storage
+            loadDashboardStats();
+        });
+
+        async function loadDashboardStats() {
+            try {
+                // Fetch Users and Courses
+                const [usersRes, coursesRes] = await Promise.all([
+                    fetch('http://localhost:5000/api/users'),
+                    fetch('http://localhost:5000/api/courses')
+                ]);
+                const usersData = await usersRes.json();
+                const coursesData = await coursesRes.json();
+                
+                const allUsers = usersData.data || [];
+                const allCourses = coursesData.data || [];
+
+                const students = allUsers.filter(u => u.role === 'student');
+                const faculty = allUsers.filter(u => u.role === 'faculty');
+                const pendingCount = allUsers.filter(u => u.status === 'pending').length;
+
+                // Update KPI Cards
+                document.getElementById('dashTotalStudents').textContent = students.length;
+                document.getElementById('dashTotalFaculty').textContent = faculty.length;
+                document.getElementById('dashActiveCourses').textContent = allCourses.length;
+
+                // Render Dynamic Pending Tasks
+                const taskList = document.getElementById('pendingTasksList');
+                taskList.innerHTML = `
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox" id="task1">
+                        <div class="task-content">
+                            <h4>Approve ${pendingCount} new student enrollments</h4>
+                            <p>Status: Requires Admin Action</p>
+                        </div>
+                        <span class="task-priority priority-high">High</span>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox" id="task2">
+                        <div class="task-content">
+                            <h4>Review faculty attendance reports</h4>
+                            <p>Automated Reminder</p>
+                        </div>
+                        <span class="task-priority priority-medium">Med</span>
+                    </div>
+                `;
+
+                // Render Dynamic Department Enrollment
+                const mcaCount = students.filter(s => s.program === 'MCA').length;
+                const bcaCount = students.filter(s => s.program === 'BCA').length;
+                const mbaCount = students.filter(s => s.program === 'MBA').length;
+                
+                document.getElementById('deptEnrollmentList').innerHTML = `
+                    <div class="dept-progress-item">
+                        <div class="dept-progress-label">
+                            <span>MCA &mdash; Master of Computer Applications</span>
+                            <span>${mcaCount} / 300</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: ${(mcaCount/300)*100}%"></div>
+                        </div>
+                    </div>
+                    <div class="dept-progress-item">
+                        <div class="dept-progress-label">
+                            <span>BCA &mdash; Bachelor of Computer Applications</span>
+                            <span>${bcaCount} / 400</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill success" style="width: ${(bcaCount/400)*100}%"></div>
+                        </div>
+                    </div>
+                    <div class="dept-progress-item">
+                        <div class="dept-progress-label">
+                            <span>MBA &mdash; Master of Business Administration</span>
+                            <span>${mbaCount} / 200</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill accent" style="width: ${(mbaCount/200)*100}%"></div>
+                        </div>
+                    </div>
+                `;
+
+                // Render Dynamic Recent Activity from sorted DB data
+                const recentActivityList = document.getElementById('recentActivityList');
+                recentActivityList.innerHTML = '';
+                
+                // Sort users by created_at
+                const sortedUsers = [...allUsers].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 3);
+                sortedUsers.forEach(u => {
+                    const timeStr = new Date(u.created_at).toLocaleDateString();
+                    recentActivityList.innerHTML += `
+                        <div class="activity-item">
+                            <div class="activity-dot stat-icon ${u.role === 'faculty' ? 'gold' : 'blue'}" aria-hidden="true">&#128100;</div>
+                            <div class="activity-content">
+                                <p><strong>${u.name}</strong> was registered as a <strong>${u.role}</strong>.</p>
+                                <span>${timeStr} &mdash; Database Action</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Render Recent Students Table
+                const recentBody = document.getElementById('recentStudentsBody');
+                recentBody.innerHTML = '';
+
+                // Get last 5 students (chronologically based on array or created_at)
+                const recentStudents = [...students].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5);
+
+                if (recentStudents.length === 0) {
+                    recentBody.innerHTML = `<tr><td colspan="6" style="text-align:center">No students found.</td></tr>`;
+                } else {
+                    recentStudents.forEach(s => {
+                        const admissionDate = s.created_at ? new Date(s.created_at).toLocaleDateString() : 'N/A';
+                        const badgeColor = s.status === 'active' ? 'success' : (s.status === 'pending' ? 'warning' : 'danger');
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${s.id}</td>
+                            <td>${s.name}</td>
+                            <td>${s.program || 'N/A'}</td>
+                            <td>Sem ${s.semester || 'N/A'}</td>
+                            <td>${admissionDate}</td>
+                            <td><span class="badge badge-${badgeColor}">${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span></td>
+                        `;
+                        recentBody.appendChild(tr);
+                    });
+                }
+            } catch (err) {
+                console.error("Error loading dashboard stats:", err);
+                document.getElementById('recentStudentsBody').innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Failed to retrieve data from backend.</td></tr>`;
+            }
+        }
+
+        /* Protect page — redirect to login if no session */
+        (function guardPage() {
+            const user = JSON.parse(sessionStorage.getItem('erp_user') || 'null');
+            if (!user) window.location.href = '../../index.html';
+        })();
+    </script>
+
+</body>
+
+</html>

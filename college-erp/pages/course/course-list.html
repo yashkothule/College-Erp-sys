@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Course List — College ERP Management System">
+    <title>Course List &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128218; Course Directory</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            List of all academic courses offered.
+                        </p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <a href="assign-faculty.html" class="btn btn-outline">
+                            &#128104; Assign Faculty
+                        </a>
+                        <a href="add-course.html" class="btn btn-primary">
+                            &#43; Add Course
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="display:flex; gap:16px; flex-wrap:wrap;">
+
+                        <div class="filter-bar" style="margin-bottom:0; flex:1;">
+                            <div class="search-box">
+                                <span class="search-icon">&#128269;</span>
+                                <input type="text" id="courseSearch" placeholder="Search by course code or title...">
+                            </div>
+                        </div>
+
+                        <select class="form-control" id="progFilter"
+                            style="width: auto; padding: 8px 12px; font-size: var(--font-size-sm);">
+                            <option value="All">All Programs</option>
+                            <option value="MCA">MCA</option>
+                            <option value="BCA">BCA</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+
+                    </div>
+
+                    <div class="card-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="erp-table" id="courseTable">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Course Title</th>
+                                        <th>Program Target</th>
+                                        <th>Credits</th>
+                                        <th>Type</th>
+                                        <th>Assigned Faculty</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="courseTableBody">
+                                    <tr>
+                                        <td colspan="7" style="text-align:center; padding: 2rem;">Loading courses...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Course Directory',
+            breadcrumb: 'Courses > List',
+            userRole: 'Admin'
+        }).then(() => {
+            loadCoursesData();
+        });
+
+        async function loadCoursesData() {
+            try {
+                const res = await fetch('http://localhost:5000/api/courses');
+                const data = await res.json();
+                const tbody = document.getElementById('courseTableBody');
+                const courses = data.data || [];
+                tbody.innerHTML = '';
+
+                if (courses.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center">No courses found.</td></tr>`;
+                } else {
+                    courses.forEach(c => {
+                        const tr = document.createElement('tr');
+                        const facultyText = c.faculty ? c.faculty : '<em>Unassigned</em>';
+                        const typeColor = (c.type || '').toLowerCase() === 'core' ? 'blue' : 'green';
+                        tr.innerHTML = `
+                            <td><strong>${c.code}</strong></td>
+                            <td>${c.title}</td>
+                            <td>${c.department} (Sem ${c.semester})</td>
+                            <td>${c.credits}</td>
+                            <td><span class="badge badge-${typeColor}">${c.type}</span></td>
+                            <td>${facultyText}</td>
+                            <td>
+                                <div style="display:flex; gap:6px;">
+                                    <button class="btn btn-sm btn-outline text-danger" title="Delete"
+                                        onclick="deleteCourse('${c.code}')">&#128465;</button>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to fetch courses:", err);
+                const tbody = document.getElementById('courseTableBody');
+                if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:red;">Failed to retrieve courses from backend.</td></tr>`;
+            }
+        }
+
+        async function deleteCourse(code) {
+            if (confirm(`Delete course ${code}? This cannot be undone.`)) {
+                try {
+                    const res = await fetch(`http://localhost:5000/api/courses/${code}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        ERP_Toast.show('Course deleted.', 'success');
+                        loadCoursesData();
+                    } else {
+                        ERP_Toast.show('Error deleting course.', 'error');
+                    }
+                } catch (err) {
+                    ERP_Toast.show('Network error.', 'error');
+                }
+            }
+        }
+
+        // Initialize Table Search (Code, Title, Target)
+        setTimeout(() => {
+            if (typeof initTableSearch === 'function') {
+                initTableSearch('courseSearch', 'courseTable', [0, 1, 2]);
+            }
+        }, 100);
+
+        // Program Filter
+        document.getElementById('progFilter').addEventListener('change', function () {
+            const filterText = this.value === 'All' ? '' : this.value.toLowerCase();
+            const rows = document.querySelectorAll('#courseTable tbody tr');
+
+            rows.forEach(row => {
+                const progText = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                if (filterText === '' || progText.includes(filterText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

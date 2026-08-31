@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Student Dashboard — College ERP Management System">
+    <title>Student Dashboard &mdash; College ERP</title>
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+    <link rel="stylesheet" href="../../assets/css/dashboard.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#127979; Student Dashboard</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm);margin-top:3px">
+                            Your academic overview &mdash; <span data-current-date></span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Welcome Banner -->
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h2>Hello, <span id="welcomeName">Student</span>! &#128075;</h2>
+                        <p>Check your courses, results, and fee status here.</p>
+                        <div class="welcome-meta">
+                            <div class="welcome-meta-item" id="welcomeProgram">&#127979; MCA &mdash; Sem 3</div>
+                            <div class="welcome-meta-item" id="welcomeCgpa">&#128203; CGPA: 8.4</div>
+                            <div class="welcome-meta-item" id="welcomeAy">&#128337; AY 2025&ndash;26</div>
+                        </div>
+                    </div>
+                    <div class="welcome-image" aria-hidden="true">&#127979;</div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">&#128218;</div>
+                        <div class="stat-info">
+                            <h3 id="stat-courses">-</h3>
+                            <p>Enrolled Courses</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">&#128203;</div>
+                        <div class="stat-info">
+                            <h3 id="stat-cgpa">-</h3>
+                            <p>Current CGPA</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon gold">&#128337;</div>
+                        <div class="stat-info">
+                            <h3 id="stat-attendance">-</h3>
+                            <p>Attendance</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red">&#128176;</div>
+                        <div class="stat-info">
+                            <h3 id="stat-fees">-</h3>
+                            <p>Pending Fees</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <a href="../exam/result-display.html" class="quick-action-btn">
+                        <i>&#128202;</i> View Results
+                    </a>
+                    <a href="../fees/receipt.html" class="quick-action-btn">
+                        <i>&#128176;</i> Fee Receipt
+                    </a>
+                    <a href="../course/course-list.html" class="quick-action-btn">
+                        <i>&#128218;</i> My Courses
+                    </a>
+                    <a href="../placement/placement-status.html" class="quick-action-btn">
+                        <i>&#127959;</i> Placement Status
+                    </a>
+                </div>
+
+                <!-- Enrolled Courses Table -->
+                <div class="card mb-24">
+                    <div class="card-header">
+                        <h3>&#128218; My Enrolled Courses</h3>
+                        <span class="badge badge-primary">Sem 3 &mdash; 2025&ndash;26</span>
+                    </div>
+                    <div class="card-body" style="padding:0">
+                        <div class="table-responsive">
+                            <table class="erp-table" aria-label="Enrolled courses">
+                                <thead>
+                                    <tr>
+                                        <th>Course Code</th>
+                                        <th>Course Name</th>
+                                        <th>Faculty</th>
+                                        <th>Credits</th>
+                                        <th>Attendance</th>
+                                        <th>Internal Marks</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="enrolledCoursesTableBody">
+                                    <tr>
+                                        <td colspan="7" style="text-align:center; padding: 2rem;">Loading courses...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({ root: '../../', pageTitle: 'Student Dashboard', breadcrumb: 'Dashboard', userRole: 'Student' })
+            .then(() => {
+                const user = JSON.parse(sessionStorage.getItem('erp_user') || '{}');
+                const el = document.getElementById('welcomeName');
+                if (el && user.name) el.textContent = user.name.split(' ')[0];
+
+                loadDashboardData();
+            });
+
+        (function guard() {
+            if (!sessionStorage.getItem('erp_user')) window.location.href = '../../index.html';
+        })();
+
+        async function loadDashboardData() {
+            try {
+                // Fetch Overview Data
+                const overviewReq = await API.getStudentOverview();
+                if (overviewReq.status === 200) {
+                    const data = overviewReq.data;
+                    document.getElementById('welcomeProgram').innerHTML = `&#127979; ${data.program} &mdash; Sem ${data.semester}`;
+                    document.getElementById('welcomeCgpa').innerHTML = `&#128203; CGPA: ${data.cgpa}`;
+                    document.getElementById('welcomeAy').innerHTML = `&#128337; AY ${data.academicYear}`;
+
+                    document.getElementById('stat-courses').textContent = data.stats.enrolledCourses;
+                    document.getElementById('stat-cgpa').textContent = data.stats.currentCgpa;
+                    document.getElementById('stat-attendance').textContent = data.stats.attendance + '%';
+                    document.getElementById('stat-fees').innerHTML = `&#8377;${data.stats.pendingFees}`;
+                }
+
+                // Fetch Enrolled Courses
+                const coursesReq = await API.getEnrolledCourses();
+                const tbody = document.getElementById('enrolledCoursesTableBody');
+                if (coursesReq.status === 200) {
+                    const courses = coursesReq.data;
+                    tbody.innerHTML = ''; // clear loading
+
+                    if (courses.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center">No courses enrolled.</td></tr>`;
+                    } else {
+                        courses.forEach(c => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${c.code}</td>
+                                <td>${c.name}</td>
+                                <td>${c.faculty}</td>
+                                <td>${c.credits}</td>
+                                <td>${c.attendance}%</td>
+                                <td>${c.internalMarks}</td>
+                                <td><span class="badge badge-${c.statusClass}">${c.status}</span></td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error("Error loading dashboard data:", err);
+                const tbody = document.getElementById('enrolledCoursesTableBody');
+                if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:red;">Failed to retrieve data.</td></tr>`;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

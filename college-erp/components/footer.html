@@ -1,0 +1,36 @@
+<!--
+  FOOTER COMPONENT - College ERP Management System
+  File: components/footer.html
+  Description: Shared footer for all dashboard pages.
+  Usage: Include via JS fetch() or JSP include.
+  Note: In JSP Phase, replace with: <%@ include file="footer.jsp" %>
+-->
+<footer class="erp-footer">
+    <div class="footer-inner">
+    </div>
+</footer>
+
+<style>
+    /* Footer Styles — scoped here to keep footer self-contained */
+    .erp-footer {
+        background: var(--bg-card);
+        border-top: 1px solid var(--border-color);
+        padding: 14px var(--content-padding);
+        margin-top: auto;
+    }
+
+    .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-size: var(--font-size-xs);
+        color: var(--text-muted);
+    }
+
+    .footer-meta {
+        font-size: 0.68rem;
+        color: var(--text-muted);
+    }
+</style>

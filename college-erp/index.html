@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="College ERP Management System — Secure Login Portal for Admin, Faculty, and Students">
+    <title>Login &mdash; College ERP Management System</title>
+
+    <!-- Global & Auth Styles -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
+
+    <!-- Favicon placeholder -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <!-- ============================================================
+     LOGIN PAGE LAYOUT
+     Two-panel: Left = Branding, Right = Login Form
+     ============================================================ -->
+    <main class="auth-page" id="loginPage">
+
+        <!-- ---- LEFT PANEL: Branding ---- -->
+        <section class="auth-panel-left" aria-label="System Information">
+
+            <!-- Institution Logo -->
+            <div class="auth-logo-circle" aria-hidden="true">
+                &#127979;
+            </div>
+
+            <h1>College <span>ERP</span><br>Management System</h1>
+            <p>A comprehensive Enterprise Resource Planning system for streamlined academic administration.</p>
+
+            <!-- Feature Highlights -->
+            <div class="auth-features" role="list">
+
+                <div class="auth-feature-item" role="listitem">
+                    <div class="auth-feature-icon">&#128107;</div>
+                    <div class="auth-feature-text">
+                        <h4>Student Management</h4>
+                        <p>Enrollment, profiles, academic records</p>
+                    </div>
+                </div>
+
+                <div class="auth-feature-item" role="listitem">
+                    <div class="auth-feature-icon">&#128203;</div>
+                    <div class="auth-feature-text">
+                        <h4>Examination &amp; Results</h4>
+                        <p>Marks entry, grade sheets, transcripts</p>
+                    </div>
+                </div>
+
+                <div class="auth-feature-item" role="listitem">
+                    <div class="auth-feature-icon">&#128176;</div>
+                    <div class="auth-feature-text">
+                        <h4>Fee Management</h4>
+                        <p>Payment tracking, receipts, pending dues</p>
+                    </div>
+                </div>
+
+                <div class="auth-feature-item" role="listitem">
+                    <div class="auth-feature-icon">&#127959;</div>
+                    <div class="auth-feature-text">
+                        <h4>Placement Cell</h4>
+                        <p>Company registration, eligibility, drives</p>
+                    </div>
+                </div>
+
+            </div><!-- end auth-features -->
+
+        </section><!-- end auth-panel-left -->
+
+
+        <!-- ---- RIGHT PANEL: Login Form ---- -->
+        <section class="auth-panel-right" aria-label="Login Form">
+
+            <div class="auth-card">
+
+                <!-- Card Header -->
+                <div class="auth-card-header">
+                    <h2>Welcome ! </h2>
+                    <p>Sign in to your account to continue</p>
+                </div>
+
+                <!-- ---- Role Selector ---- -->
+                <div class="role-tabs" role="tablist" aria-label="Select your role">
+                    <button class="role-tab active" id="roleAdmin" role="tab" aria-selected="true"
+                        onclick="selectRole('admin', this)">
+                        <span>&#9733;</span>
+                        Admin
+                    </button>
+                    <button class="role-tab" id="roleFaculty" role="tab" aria-selected="false"
+                        onclick="selectRole('faculty', this)">
+                        <span>&#128084;</span>
+                        Faculty
+                    </button>
+                    <button class="role-tab" id="roleStudent" role="tab" aria-selected="false"
+                        onclick="selectRole('student', this)">
+                        <span>&#127979;</span>
+                        Student
+                    </button>
+                </div>
+
+                <!-- ---- Login Form ---- -->
+                <form id="loginForm" novalidate autocomplete="on">
+
+                    <!-- Username / Employee ID / Roll No -->
+                    <div class="form-group">
+                        <label class="form-label" for="loginUserId">
+                            <span id="userIdLabel">Username / Admin ID</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-icon" id="userIdIcon" aria-hidden="true">&#128100;</span>
+                            <input type="text" class="form-control" id="loginUserId" name="userId"
+                                placeholder="Enter your ID" required autocomplete="username" aria-required="true"
+                                aria-describedby="userIdError">
+                            <div class="form-error" id="userIdError">Please enter your login ID.</div>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label class="form-label" for="loginPassword">
+                            Password
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-icon" aria-hidden="true">&#128274;</span>
+                            <input type="password" class="form-control" id="loginPassword" name="password"
+                                placeholder="Enter your password" required autocomplete="current-password"
+                                data-min-length="4" aria-required="true" aria-describedby="passwordError">
+                            <!-- Eye toggle -->
+                            <button type="button" class="toggle-password" id="togglePwd" title="Show/Hide Password"
+                                aria-label="Toggle Password Visibility">
+                                &#128065;&#xFE0E;
+                            </button>
+                            <div class="form-error" id="passwordError">Password must be at least 4 characters.</div>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me + Forgot Password -->
+                    <div class="auth-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe" name="rememberMe">
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot Password?</a>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-login btn-block btn-lg" id="loginBtn">
+                        Sign In &rarr;
+                    </button>
+
+                    <!-- Registration Link -->
+                    <div style="text-align: center; margin-top: 16px;">
+                        <span class="text-muted" style="font-size: var(--font-size-sm);">Don't have an account?</span>
+                        <a href="register.html" class="forgot-link" style="margin-left: 4px;">Register here</a>
+                    </div>
+
+                    <!-- Error Alert (shown on wrong credentials) -->
+                    <div class="alert alert-danger mt-16 hidden" id="loginError" role="alert">
+                        &#10060; Invalid credentials. Please try again.
+                    </div>
+
+                </form><!-- end loginForm -->
+
+            </div><!-- end auth-card -->
+
+        </section><!-- end auth-panel-right -->
+
+    </main><!-- end auth-page -->
+
+
+    <!-- ============================================================
+     FORGOT PASSWORD MODAL
+     ============================================================ -->
+    <div class="modal-overlay" id="forgotModal" role="dialog" aria-modal="true" aria-labelledby="forgotModalTitle">
+        <div class="modal" style="max-width: 420px">
+            <div class="modal-header">
+                <h3 id="forgotModalTitle">&#128274; Reset Password</h3>
+                <button class="modal-close" data-modal-close aria-label="Close">&#10005;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-16" style="font-size:var(--font-size-sm)">
+                    Enter your registered email address. We'll send a password reset link to your inbox.
+                </p>
+                <form id="forgotForm" novalidate>
+                    <div class="form-group">
+                        <label class="form-label" for="forgotEmail">Email Address <span
+                                class="required">*</span></label>
+                        <div class="input-group">
+                            <span class="input-icon">&#9993;</span>
+                            <input type="email" class="form-control" id="forgotEmail" placeholder="your@email.com"
+                                required style="padding-left:40px">
+                            <div class="form-error">Please enter a valid email address.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block mt-8" id="resetBtn">
+                        Send Reset Link
+                    </button>
+                </form>
+                <div class="alert alert-success mt-16 hidden" id="resetSuccess" role="alert">
+                    &#10003; Password reset link sent! Check your email.
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        /**
+         * Login Page JS
+         * Handles role selection, form validation, mock auth, and credential fill.
+         */
+
+        /* ---- Currently selected role ---- */
+        let selectedRole = 'admin';
+
+        /* ---- Role selection handler ---- */
+        function selectRole(role, btn) {
+            selectedRole = role;
+
+            // Update tab styling
+            document.querySelectorAll('.role-tab').forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+
+            // Update label text based on role
+            const labels = {
+                admin: { label: 'Username / Admin ID', placeholder: 'e.g. admin001', icon: '&#9733;' },
+                faculty: { label: 'Employee ID', placeholder: 'e.g. FAC2024001', icon: '&#128084;' },
+                student: { label: 'Roll Number', placeholder: 'e.g. STU2024001', icon: '&#127979;' },
+            };
+
+            const cfg = labels[role];
+            const labelEl = document.getElementById('userIdLabel');
+            const iconEl = document.getElementById('userIdIcon');
+            const inputEl = document.getElementById('loginUserId');
+
+            if (labelEl) labelEl.textContent = cfg.label;
+            if (iconEl) iconEl.innerHTML = cfg.icon;
+            if (inputEl) inputEl.placeholder = cfg.placeholder;
+
+            // Clear errors
+            document.getElementById('loginError')?.classList.add('hidden');
+        }
+
+        /* ---- Form Submit Handler ---- */
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const errDiv = document.getElementById('loginError');
+            errDiv.classList.add('hidden');
+
+            // Validate form fields using shared validateForm utility
+            if (!validateForm(this)) return;
+
+            const userId = document.getElementById('loginUserId').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            // Loading state
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+
+            fetch('http://localhost:5000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: userId, password: password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 200 && data.data) {
+                    const matched = data.data;
+                    
+                    // Double check role mismatch if desired, or let backend handle
+                    if (matched.role !== selectedRole) {
+                        errDiv.classList.remove('hidden');
+                        errDiv.innerHTML = `&#10060; Invalid role. Please select the correct role tab.`;
+                        document.getElementById('loginPassword').value = '';
+                        document.getElementById('loginPassword').focus();
+                        return;
+                    }
+
+                    // Store session (in real system, session is managed server-side via token)
+                    sessionStorage.setItem('erp_user', JSON.stringify({
+                        name: matched.name,
+                        email: matched.email,
+                        role: matched.role.charAt(0).toUpperCase() + matched.role.slice(1),
+                        initials: matched.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase(),
+                        id: matched.id
+                    }));
+
+                    // Redirect to appropriate dashboard
+                    const dashboardMap = {
+                        admin: 'pages/auth/admin-dashboard.html',
+                        faculty: 'pages/auth/faculty-dashboard.html',
+                        student: 'pages/auth/student-dashboard.html'
+                    };
+
+                    window.location.href = dashboardMap[matched.role] || dashboardMap['admin'];
+
+                } else {
+                    // Show error
+                    errDiv.classList.remove('hidden');
+                    errDiv.innerHTML = `&#10060; ${data.message || 'Invalid credentials. Please try again.'}`;
+                    document.getElementById('loginPassword').value = '';
+                    document.getElementById('loginPassword').focus();
+                }
+            })
+            .catch(err => {
+                console.error("Login error:", err);
+                errDiv.classList.remove('hidden');
+                errDiv.innerHTML = `&#10060; Network error. Is the backend running?`;
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = 'Sign In →';
+            });
+        });
+
+        /* ---- Forgot Password ---- */
+        document.getElementById('forgotPasswordLink').addEventListener('click', e => {
+            e.preventDefault();
+            ERP_Modal.open('forgotModal');
+        });
+
+        document.getElementById('forgotForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!validateForm(this)) return;
+
+            const btn = document.getElementById('resetBtn');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            setTimeout(() => {
+                document.getElementById('resetSuccess').classList.remove('hidden');
+                btn.disabled = false;
+                btn.textContent = 'Send Reset Link';
+                // Auto-close modal after 2s
+                setTimeout(() => ERP_Modal.close('forgotModal'), 2500);
+            }, 1000);
+        });
+
+
+
+        /* ---- Check if already logged in ---- */
+        (function checkSession() {
+            const user = JSON.parse(sessionStorage.getItem('erp_user') || 'null');
+            if (user) {
+                const dashMap = {
+                    Admin: 'pages/auth/admin-dashboard.html',
+                    Faculty: 'pages/auth/faculty-dashboard.html',
+                    Student: 'pages/auth/student-dashboard.html'
+                };
+                window.location.href = dashMap[user.role] || dashMap['Admin'];
+            }
+        })();
+    </script>
+
+</body>
+
+</html>

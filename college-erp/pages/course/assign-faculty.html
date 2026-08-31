@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Assign Faculty to Course — College ERP">
+    <title>Assign Faculty &mdash; College ERP</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/sidebar.css">
+    <link rel="stylesheet" href="../../assets/css/navbar.css">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <script>if (localStorage.getItem('erp_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');</script>
+</head>
+
+<body>
+
+    <div class="erp-wrapper">
+        <div id="sidebar-container"></div>
+
+        <div class="erp-main" id="erpMain">
+            <div id="navbar-container"></div>
+
+            <main class="erp-content" id="mainContent">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>&#128104;&#8205;&#12797eb; Assign Faculty to Course</h1>
+                        <p class="text-muted" style="font-size:var(--font-size-sm); margin-top:3px">
+                            Allocate faculty members to teach specific courses for the current semester.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" style="max-width: 800px; margin: 0 auto;">
+                    <div class="card-header">
+                        <h3>Course Allocation Form</h3>
+                        <span class="badge badge-primary">Term: Even 2025-26</span>
+                    </div>
+                    <div class="card-body">
+
+                        <form id="assignFacultyForm" novalidate>
+
+                            <div class="form-grid">
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label class="form-label" for="courseSelect">Select Course <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="courseSelect" required>
+                                        <option value="" disabled selected>-- Loading Courses... --</option>
+                                    </select>
+                                    <div class="form-error">Please select a course.</div>
+                                </div>
+
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label class="form-label" for="facultySelect">Select Faculty <span
+                                            class="required">*</span></label>
+                                    <select class="form-control" id="facultySelect" required>
+                                        <option value="" disabled selected>-- Loading Faculty... --</option>
+                                    </select>
+                                    <div class="form-error">Please select a faculty member.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="section">Section / Batch</label>
+                                    <select class="form-control" id="section">
+                                        <option value="All">All Sections</option>
+                                        <option value="A">Section A</option>
+                                        <option value="B">Section B</option>
+                                        <option value="C">Section C</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="hours">Hours Per Week</label>
+                                    <input type="number" class="form-control" id="hours" min="1" max="15" value="4">
+                                </div>
+                            </div>
+
+                            <div class="form-group"
+                                style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    &#10003; Allocate Course
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+                <!-- Recent Allocations Table -->
+                <div class="card mt-24">
+                    <div class="card-header">
+                        <h3>Recent Allocations</h3>
+                    </div>
+                    <div class="card-body" style="padding:0">
+                        <div class="table-responsive">
+                            <table class="erp-table">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Program</th>
+                                        <th>Faculty Assigned</th>
+                                        <th>Section</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allocationsTableBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align:center; padding: 2rem;">Loading allocations...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/components.js"></script>
+    <script>
+        initERPComponents({
+            root: '../../',
+            pageTitle: 'Assign Faculty',
+            breadcrumb: 'Courses > Assign',
+            userRole: 'Admin'
+        });
+
+        async function loadDropdowns() {
+            try {
+                // Load Courses from backend
+                const cRes = await fetch('http://localhost:5000/api/courses');
+                const cData = await cRes.json();
+                const courses = cData.data || [];
+
+                const courseSelect = document.getElementById('courseSelect');
+                courseSelect.innerHTML = '<option value="" disabled selected>-- Choose Course --</option>';
+                courses.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.code;
+                    opt.textContent = `${c.code} - ${c.title} (${c.department}, Sem ${c.semester})`;
+                    courseSelect.appendChild(opt);
+                });
+
+                // Load Faculty from backend
+                const fRes = await fetch('http://localhost:5000/api/users?role=faculty');
+                const fData = await fRes.json();
+                const faculty = fData.data || [];
+
+                const facultySelect = document.getElementById('facultySelect');
+                facultySelect.innerHTML = '<option value="" disabled selected>-- Choose Faculty Member --</option>';
+                faculty.forEach(f => {
+                    const opt = document.createElement('option');
+                    opt.value = f.id;
+                    opt.textContent = `${f.name} (${f.program || 'Faculty'})`;
+                    facultySelect.appendChild(opt);
+                });
+
+                loadAllocationsTable(courses);
+            } catch (err) {
+                console.error("Error loading dropdowns:", err);
+                ERP_Toast.show('Failed to load data from server.', 'error');
+            }
+        }
+
+        function loadAllocationsTable(courses) {
+            const tbody = document.getElementById('allocationsTableBody');
+            tbody.innerHTML = '';
+
+            const allocated = courses.filter(c => c.faculty && c.faculty !== null);
+
+            if (allocated.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center">No courses have been allocated yet.</td></tr>`;
+            } else {
+                allocated.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${c.code} - ${c.title}</td>
+                        <td>${c.department} (Sem ${c.semester})</td>
+                        <td>${c.faculty}</td>
+                        <td>All</td>
+                        <td><span class="badge badge-success">Active</span></td>
+                        <td><button class="btn btn-sm btn-outline text-danger" onclick="revokeCourse('${c.code}')">Revoke</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        loadDropdowns();
+
+        document.getElementById('assignFacultyForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            if (!validateForm(this)) return;
+
+            const btn = document.getElementById('submitBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Allocating...';
+
+            const courseCode = document.getElementById('courseSelect').value;
+            const facultyId = document.getElementById('facultySelect').value;
+            const facultyName = document.getElementById('facultySelect').options[document.getElementById('facultySelect').selectedIndex].text;
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/courses/${courseCode}/assign`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ facultyId })
+                });
+
+                if (res.ok) {
+                    ERP_Toast.show(`Course successfully allocated to ${facultyName}!`, 'success');
+                    this.reset();
+                    loadDropdowns();
+                } else {
+                    const data = await res.json();
+                    ERP_Toast.show(data.message || 'Error allocating course', 'error');
+                }
+            } catch (err) {
+                console.error("Error assigning faculty:", err);
+                ERP_Toast.show('Network error. Backend not reachable.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        });
+
+        async function revokeCourse(code) {
+            if (confirm(`Revoke faculty assignment for course ${code}?`)) {
+                try {
+                    const res = await fetch(`http://localhost:5000/api/courses/${code}/assign`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ facultyId: null })
+                    });
+                    if (res.ok) {
+                        ERP_Toast.show('Assignment revoked.', 'success');
+                        loadDropdowns();
+                    } else {
+                        ERP_Toast.show('Error revoking assignment.', 'error');
+                    }
+                } catch (err) {
+                    ERP_Toast.show('Network error.', 'error');
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
